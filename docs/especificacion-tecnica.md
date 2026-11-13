@@ -111,7 +111,7 @@ lsdfms-telecom/
 │       │   └── ParallelEngine.java    # Implementación concurrente (ExecutorService)
 │       └── search/
 │           └── BinaryIndexSearch.java # Consulta O(log n) sobre index_phone.idx
-└── README_SPEC.md               # Este documento
+└── docs/especificacion-tecnica.md # Este documento
 
 ```
 
@@ -149,4 +149,4 @@ El objetivo del 100% es entregar un sistema robusto, completamente paralelizado,
 
 ## 6. Prompt Sugerido para Asistentes de Código (IA)
 
-> *"Actúa como un Ingeniero Senior de Java especializado en Computación de Alto Rendimiento (HPC) y sistemas I/O de bajo nivel. Basándote estrictamente en el archivo `README_SPEC.md`, genera la implementación de \[nombre de la clase, ej. `ParallelEngine.java`\]. Restricciones obligatorias: usa únicamente la biblioteca estándar de Java 17 (sin librerías externas), prioriza `java.nio.channels.FileChannel` y arreglos primitivos para evitar presión sobre el Garbage Collector, y asegura el cierre de recursos con try-with-resources."*
+> *"Actúa como un Ingeniero Senior de Java especializado en Computación de Alto Rendimiento (HPC) y sistemas I/O de bajo nivel. Basándote estrictamente en el archivo `docs/especificacion-tecnica.md`, genera la implementación de \[nombre de la clase, ej. `ParallelEngine.java`\]. Restricciones obligatorias: usa únicamente la biblioteca estándar de Java 17 (sin librerías externas), prioriza `java.nio.channels.FileChannel` y arreglos primitivos para evitar presión sobre el Garbage Collector, y asegura el cierre de recursos con try-with-resources."*
