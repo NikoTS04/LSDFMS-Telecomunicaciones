@@ -23,6 +23,12 @@ public final class BinaryFileHandler {
         void accept(long phoneNumber, long byteOffset) throws IOException;
     }
 
+    @FunctionalInterface
+    public interface RecordConsumer {
+        void accept(boolean deleted, int payloadLength, long phoneNumber, long byteOffset)
+                throws IOException;
+    }
+
     /** Resultado individual de consulta; no se materializa durante INDEX. */
     public record CdrRecord(long phoneNumber, long timestamp, byte[] payload) { }
 
@@ -33,6 +39,15 @@ public final class BinaryFileHandler {
 
     /** Escanea cabeceras, omite payloads y emite únicamente registros activos. */
     public static FileStats scan(Path path, ActiveRecordConsumer consumer) throws IOException {
+        return scanRecords(path, (deleted, length, phone, offset) -> {
+            if (!deleted) {
+                consumer.accept(phone, offset);
+            }
+        });
+    }
+
+    /** Emite metadatos sin asignar objetos por registro ni cargar payloads. */
+    public static FileStats scanRecords(Path path, RecordConsumer consumer) throws IOException {
         ByteBuffer header = ByteBuffer.allocateDirect(CdrFormat.HEADER_BYTES)
                 .order(CdrFormat.BYTE_ORDER);
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ,
@@ -56,9 +71,7 @@ public final class BinaryFileHandler {
                 if (length < 0 || length > size - offset - CdrFormat.HEADER_BYTES) {
                     throw invalid(path, offset, "longitud de payload inválida o payload truncado");
                 }
-                if (flag == 0) {
-                    consumer.accept(header.getLong(), offset);
-                }
+                consumer.accept(flag != 0, length, header.getLong(), offset);
                 records++;
                 deleted += flag;
                 offset += CdrFormat.HEADER_BYTES + (long) length;

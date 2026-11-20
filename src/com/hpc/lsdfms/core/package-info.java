@@ -1,2 +1,2 @@
-/** Motor secuencial de INDEX; PACK y el motor paralelo son incrementos posteriores. */
+/** Motores secuenciales de INDEX/PACK y recuperación; paralelismo en incrementos posteriores. */
 package com.hpc.lsdfms.core;

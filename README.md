@@ -2,12 +2,13 @@
 
 Base para un motor de gestión de archivos CDR masivos en **Java 17+, sin dependencias externas**.
 La [especificación técnica](docs/especificacion-tecnica.md) describe el objetivo completo;
-el sprint 1 incorpora generación sintética, inspección, INDEX secuencial y búsqueda verificable.
+el sprint 2 completa INDEX/PACK secuenciales, búsqueda verificable y recuperación de mantenimiento.
 
 ## Documentación y planificación
 
 - [Plan de cinco sprints hasta la entrega completa](docs/plan-sprints.md).
 - [Contrato, límites y evidencia del sprint 1](docs/sprint-1.md).
+- [PACK, exclusión y recuperación del sprint 2](docs/sprint-2.md).
 - [Skills recomendadas y criterios de selección](docs/skills-recomendadas.md).
 - [Dónde se utilizaría el motor, con un ejemplo de telecomunicaciones](docs/aplicaciones-del-motor.md).
 
@@ -52,15 +53,42 @@ atómico. `search` devuelve todas las coincidencias verificadas en TSV, seguidas
 para barra inversa, tabulaciones y saltos de línea.
 
 Salidas: `0` éxito, `1` error de datos/I/O o presupuesto de memoria, `2` argumentos
-inválidos. No ejecutar operaciones simultáneas ni modificar los `.dat` entre
-indexación y consulta. Reconstruir el índice después de cualquier cambio.
+inválidos. Las operaciones se excluyen mediante un bloqueo cooperativo por dataset.
+No modificar los `.dat` externamente entre indexación y consulta; reconstruir el
+índice después de cualquier cambio.
 
 La ordenación es en memoria: dos pasadas de cabeceras y arreglos primitivos
 con límite conservador de un cuarto del heap máximo para entradas. Si se excede,
-se informa error sin sustituir el índice. La ordenación externa y los bloqueos
-de mantenimiento pertenecen a sprints posteriores. Una consulta materializa solo
+se informa error sin sustituir el índice. La ordenación externa
+pertenece al sprint 5. Una consulta materializa solo
 un payload a la vez (límite individual de un cuarto del heap máximo).
 Ver [contrato y límites](docs/sprint-1.md).
+
+## PACK y recuperación (sprint 2)
+
+PACK modifica los archivos: usar una copia del dataset si se necesita conservar
+los originales. El `manifest.json` del generador se conserva como evidencia de la
+generación, no se actualiza y ya no describe los tamaños/conteos tras compactar.
+
+```sh
+java -cp build/classes com.hpc.lsdfms.Main pack data
+# Solo si quedó mantenimiento pendiente tras un error:
+java -cp build/classes com.hpc.lsdfms.Main recover data
+```
+
+`pack` elimina físicamente los borrados, conserva los bytes/orden de los activos
+y reconstruye INDEX automáticamente. Imprime bytes antes/después/recuperados y
+activos. Repetirlo sin nuevos borrados recupera cero bytes.
+
+Todas las operaciones (incluidas búsquedas e inspección) usan `.lsdfms.lock`;
+si otro proceso/hilo posee el bloqueo, fallan sin esperar. **No borrar ese archivo**.
+El marcador persistente `.lsdfms-maintenance` bloquea INDEX y búsquedas hasta
+completar la recuperación. `inspect` permite diagnosticar bajo exclusión.
+
+Ante fallo, corregir espacio/permisos/datos y ejecutar `recover`; no quitar el
+marcador manualmente. El reemplazo es atómico por archivo, no por dataset.
+Los temporales de una caída abrupta no se reutilizan ni se borran automáticamente.
+Ver [procedimiento, garantías y límites](docs/sprint-2.md).
 
 ## Generación de datos
 
@@ -72,7 +100,7 @@ java -cp build/classes com.hpc.lsdfms.Main inspect data/2gib
 ```
 
 Para 10 GiB cambia `--total-size 2GiB` por `--total-size 10GiB`. Reserva espacio
-adicional para los futuros temporales de `PACK` y archivos de índice.
+adicional para temporales de `PACK` y archivos de índice.
 No se generan datasets masivos automáticamente al compilar o ejecutar pruebas.
 
 Muestra de tamaño exacto en registros:
@@ -128,10 +156,10 @@ No se deben modificar archivos durante la inspección.
 docs/especificacion-tecnica.md   Objetivos y criterios de aceptación
 scripts/generate_cdr.py          Generador streaming reproducible
 src/com/hpc/lsdfms/
-  Main.java                     CLI: inspect, index, search y --help
+  Main.java                     CLI: inspect, index, search, pack, recover y --help
   model/                        Contrato CDR y serialización del índice
-  io/                           Escaneo y validación estructural de archivos
-  core/                         INDEX secuencial sobre tuplas primitivas
+  io/                           Escaneo, copia acotada, compactación y bloqueo de dataset
+  core/                         INDEX/PACK secuenciales y recuperación
   search/                       Búsqueda binaria de rangos con verificación
 tests/                          Pruebas sin frameworks externos
 data/                           Datasets locales ignorados por Git
@@ -145,12 +173,13 @@ build/                          Clases compiladas ignoradas por Git
 - [x] Inspección Java de archivos generados y pruebas automatizadas del contrato.
 - [ ] Ejecutar y medir generación de al menos 2 GiB en el equipo de evaluación.
 - [x] `SequentialEngine`: `INDEX` de referencia.
-- [ ] `SequentialEngine`: `PACK` de referencia.
+- [x] `SequentialEngine`: `PACK` de referencia, recuperación e integración con INDEX.
 - [ ] `ParallelEngine`: `INDEX` concurrente y ordenación sobre primitivos.
 - [x] Búsqueda binaria y verificación de `fileId`/`byteOffset`.
 - [ ] `PACK` paralelo, reemplazo atómico e invalidación/regeneración de índices.
 - [ ] Ordenación externa para índices mayores que la RAM y benchmarks de escalabilidad.
 
-El sprint 1 **no representa la entrega del 50%**. No se incluyen motores vacíos
+El sprint 2 **no representa aún la entrega del 50%**: faltan INDEX paralelo y
+mediciones masivas del sprint 3. No se incluyen motores vacíos
 con operaciones aparentemente funcionales. La especificación conserva los criterios
 de aceptación como pendientes hasta validar los hitos correspondientes.

@@ -2,31 +2,33 @@ package com.hpc.lsdfms;
 
 import com.hpc.lsdfms.io.BinaryFileHandler;
 import com.hpc.lsdfms.io.DatasetFiles;
+import com.hpc.lsdfms.io.DatasetAccess;
 import com.hpc.lsdfms.core.SequentialEngine;
 import com.hpc.lsdfms.search.BinaryIndexSearch;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
-/** CLI del motor secuencial y consulta; PACK no está implementado aún. */
+/** CLI del motor secuencial con exclusión y recuperación de mantenimiento. */
 public final class Main {
     private Main() { }
 
     public static void main(String[] args) {
         if (args.length == 0 || (args.length == 1 && "--help".equals(args[0]))) {
             System.out.println("Uso: java -cp build/classes com.hpc.lsdfms.Main "
-                    + "inspect|index <directorio>\n"
+                    + "inspect|index|pack|recover <directorio>\n"
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "search <directorio> <phoneNumber>\n"
                     + "Salidas: 0 éxito, 1 error de datos/I/O, 2 argumentos inválidos.\n"
-                    + "Dataset inmutable; no ejecutar operaciones simultáneas. PACK pendiente.");
+                    + "Bloqueo exclusivo por dataset; recover completa mantenimiento pendiente.");
             return;
         }
         boolean valid = (args.length == 2
-                && ("inspect".equals(args[0]) || "index".equals(args[0])))
+                && ("inspect".equals(args[0]) || "index".equals(args[0])
+                        || "pack".equals(args[0]) || "recover".equals(args[0])))
                 || (args.length == 3 && "search".equals(args[0]));
         if (!valid) {
-            System.err.println("Comando inválido. Usa --help. PACK aún no está implementado.");
+            System.err.println("Comando inválido. Usa --help.");
             System.exit(2);
             return;
         }
@@ -35,6 +37,13 @@ public final class Main {
             switch (args[0]) {
                 case "inspect" -> inspect(directory);
                 case "index" -> System.out.println("INDEX\t" + new SequentialEngine().index(directory));
+                case "pack", "recover" -> {
+                    SequentialEngine engine = new SequentialEngine();
+                    var stats = "pack".equals(args[0]) ? engine.pack(directory) : engine.recover(directory);
+                    System.out.printf("%s\t%d\t%d\t%d\t%d%n",
+                            "pack".equals(args[0]) ? "PACK" : "RECOVER", stats.bytesBefore(),
+                            stats.bytesAfter(), stats.reclaimedBytes(), stats.activeRecords());
+                }
                 case "search" -> search(directory, Long.parseLong(args[2]));
                 default -> throw new IllegalArgumentException("Comando inválido");
             }
@@ -60,6 +69,12 @@ public final class Main {
     }
 
     private static void inspect(Path directory) throws IOException {
+        try (DatasetAccess access = DatasetAccess.acquire(directory)) {
+            inspectLocked(access.directory());
+        }
+    }
+
+    private static void inspectLocked(Path directory) throws IOException {
         var files = DatasetFiles.list(directory);
         long bytes = 0;
         long records = 0;

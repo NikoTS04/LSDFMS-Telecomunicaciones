@@ -128,7 +128,7 @@ class IndexSearchTest(unittest.TestCase):
         for args in (("index",), ("index", self.directory, "extra"),
                      ("search", self.directory), ("search", self.directory, "bad"),
                      ("search", self.directory, "9223372036854775808"),
-                     ("pack", self.directory)):
+                     ("pack", self.directory, "extra")):
             self.assertEqual(self.java(*args).returncode, 2)
         for directory in (self.directory, self.directory / "missing"):
             self.assertEqual(self.java("index", directory).returncode, 1)

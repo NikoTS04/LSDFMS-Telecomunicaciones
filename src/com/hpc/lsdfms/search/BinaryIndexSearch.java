@@ -2,6 +2,7 @@ package com.hpc.lsdfms.search;
 
 import com.hpc.lsdfms.core.SequentialEngine;
 import com.hpc.lsdfms.io.BinaryFileHandler;
+import com.hpc.lsdfms.io.DatasetAccess;
 import com.hpc.lsdfms.model.CdrFormat;
 import com.hpc.lsdfms.model.IndexEntry;
 import java.io.IOException;
@@ -19,6 +20,13 @@ public final class BinaryIndexSearch {
     }
 
     public long search(Path directory, long phone, RecordConsumer consumer) throws IOException {
+        try (DatasetAccess access = DatasetAccess.acquire(directory)) {
+            access.requireReady();
+            return searchLocked(access.directory(), phone, consumer);
+        }
+    }
+
+    private long searchLocked(Path directory, long phone, RecordConsumer consumer) throws IOException {
         try (FileChannel index = FileChannel.open(directory.resolve(SequentialEngine.INDEX_NAME),
                 StandardOpenOption.READ, LinkOption.NOFOLLOW_LINKS)) {
             long size = index.size();
