@@ -69,8 +69,8 @@ La búsqueda del rango cuesta `O(log n)` y recuperar `k` coincidencias añade al
 
 ## Estado y límites
 
-Actualmente funcionan generación e inspección; INDEX, búsqueda y PACK son
-funcionalidades previstas en el [plan de sprints](plan-sprints.md).
+Actualmente funcionan generación, inspección, INDEX secuencial y búsqueda;
+PACK y paralelismo siguen previstos en el [plan de sprints](plan-sprints.md).
 La integración anterior es una propuesta, no una API implementada.
 
 Para producción con datos reales harían falta controles adicionales: privacidad,
