@@ -71,7 +71,7 @@ class JavaInteropTest(unittest.TestCase):
 
     def test_help_and_unknown_commands(self):
         self.assertEqual(self.java("--help").returncode, 0)
-        self.assertEqual(self.java("index", self.directory).returncode, 2)
+        self.assertEqual(self.java("unknown", self.directory).returncode, 2)
 
     def test_index_serialization_contract(self):
         result = self.java(main="FormatTest")

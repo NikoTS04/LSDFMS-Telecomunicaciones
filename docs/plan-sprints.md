@@ -60,26 +60,26 @@ pequeños. Probar duplicados, ausencia de clave, archivos vacíos, todos borrado
 IDs no consecutivos y entradas/archivos truncados.
 
 **Cierre:** contrato, pruebas y demo documentados en [sprint-1.md](sprint-1.md).
-Disponibles `inspect`, `index`, `search` y `--help`; PACK continúa pendiente.
+El cierre del sprint 1 incorporó `inspect`, `index`, `search` y `--help`.
 
 ## Sprint 2 · PACK secuencial y consistencia
 
 **Objetivo:** disponer del baseline completo sin servir offsets obsoletos.
 
-- [ ] S2-01: implementar PACK secuencial copiando registros activos completos
+- [x] S2-01: implementar PACK secuencial copiando registros activos completos
   a temporales en el mismo sistema de archivos.
-- [ ] S2-02: manejar transferencias parciales y ausencia de progreso de
+- [x] S2-02: manejar transferencias parciales y ausencia de progreso de
   `transferTo`; definir reintentos limitados o copia mediante buffer reutilizable.
-- [ ] S2-03: validar el temporal, forzar escritura según el contrato acordado,
+- [x] S2-03: validar el temporal, forzar escritura según el contrato acordado,
   cerrar canales y reemplazar mediante `ATOMIC_MOVE`.
-- [ ] S2-04: diseñar exclusión entre búsqueda, INDEX y PACK para el dataset.
+- [x] S2-04: diseñar exclusión entre búsqueda, INDEX y PACK para el dataset.
   Documentar un solo proceso propietario; si se permiten varios procesos,
   añadir bloqueo entre procesos y probarlo.
-- [ ] S2-05: invalidar el índice **antes del primer reemplazo**, bloquear consultas
+- [x] S2-05: invalidar el índice **antes del primer reemplazo**, bloquear consultas
   durante mantenimiento y regenerarlo al terminar PACK.
-- [ ] S2-06: registrar estado de mantenimiento de forma persistente: un reinicio
+- [x] S2-06: registrar estado de mantenimiento de forma persistente: un reinicio
   tras un fallo no debe tratar un índice anterior como válido.
-- [ ] S2-07: documentar recuperación de temporales y fallo por disco lleno;
+- [x] S2-07: documentar recuperación de temporales y fallo por disco lleno;
   nunca borrar originales o respaldos sin comprobar su estado.
 
 **Aceptación:** conservar exactamente registros activos y sus bytes, mantener el
@@ -95,6 +95,10 @@ silencioso a un reemplazo no atómico.
 colección. Un fallo entre archivos puede dejar mezcla de archivos compactados
 y originales; los CDR activos se conservan, pero las consultas deben permanecer
 bloqueadas hasta recuperar el estado y reconstruir el índice.
+
+**Cierre:** completado en `feat/sprint-2-pack-consistency`; contrato, recuperación,
+pruebas y demo en [sprint-2.md](sprint-2.md). Disponibles `pack` y `recover`;
+INDEX/búsqueda/inspección CLI ahora adquieren bloqueo de dataset.
 
 ## Sprint 3 · INDEX paralelo y cierre del 50%
 
