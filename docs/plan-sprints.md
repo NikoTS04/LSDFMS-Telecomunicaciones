@@ -11,7 +11,7 @@ Es una estimación, no una fecha comprometida: ajustar al conocer disponibilidad
 hardware y resultados del primer sprint. Los responsables se asignarán al iniciar
 cada sprint. No se requiere desarrollar interfaz web, API ni facturación.
 
-## Punto de partida verificado
+## Punto de partida verificado (antes del sprint 1)
 
 - Generador Python reproducible y streaming, contrato binario e inspección Java.
 - `IndexEntry` serializa entradas, pero todavía no construye índices.
@@ -39,19 +39,19 @@ no el porcentaje de semanas transcurridas.
 
 **Objetivo:** demostrar que cada entrada apunta al registro activo correcto.
 
-- [ ] S1-01: definir contratos de motores y CLI; fijar nombres de comandos,
+- [x] S1-01: definir contratos de motores y CLI; fijar nombres de comandos,
   códigos de salida y tratamiento de errores antes de implementarlos.
-- [ ] S1-02: reutilizar/extender el escaneo de `io/BinaryFileHandler.java` para
+- [x] S1-02: reutilizar/extender el escaneo de `io/BinaryFileHandler.java` para
   emitir clave, identificador numérico de archivo y offset inicial del registro.
-- [ ] S1-03: implementar `core/SequentialEngine.java` para INDEX con arreglos
+- [x] S1-03: implementar `core/SequentialEngine.java` para INDEX con arreglos
   primitivos, sin objetos por registro y omitiendo borrados.
-- [ ] S1-04: ordenar tuplas completas `(phoneNumber, fileId, byteOffset)`.
+- [x] S1-04: ordenar tuplas completas `(phoneNumber, fileId, byteOffset)`.
   Usar `fileId` y offset como desempate determinista; nunca ordenar solo `keys`.
-- [ ] S1-05: escribir `index_phone.idx` Big-Endian en temporal y publicarlo solo
+- [x] S1-05: escribir `index_phone.idx` Big-Endian en temporal y publicarlo solo
   tras finalizar y cerrar correctamente la escritura.
-- [ ] S1-06: implementar `search/BinaryIndexSearch.java`: búsqueda por límites
+- [x] S1-06: implementar `search/BinaryIndexSearch.java`: búsqueda por límites
   inferior/superior para devolver todas las coincidencias de claves repetidas.
-- [ ] S1-07: añadir lectura del registro localizado y verificación de clave,
+- [x] S1-07: añadir lectura del registro localizado y verificación de clave,
   límites de offset y `isDeleted == 0`.
 
 **Aceptación:** índice con tamaño `20 × activos`, ordenado, sin entradas de
@@ -59,8 +59,8 @@ borrados; comparar todas las tuplas con un oráculo independiente en fixtures
 pequeños. Probar duplicados, ausencia de clave, archivos vacíos, todos borrados,
 IDs no consecutivos y entradas/archivos truncados.
 
-**Demo:** generar una muestra, indexarla y recuperar todos los CDR de un teléfono.
-Los comandos nuevos se documentan al implementarse; hoy solo existe `inspect`.
+**Cierre:** contrato, pruebas y demo documentados en [sprint-1.md](sprint-1.md).
+Disponibles `inspect`, `index`, `search` y `--help`; PACK continúa pendiente.
 
 ## Sprint 2 · PACK secuencial y consistencia
 
