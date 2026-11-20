@@ -2,7 +2,14 @@
 
 Base para un motor de gestión de archivos CDR masivos en **Java 17+, sin dependencias externas**.
 La [especificación técnica](docs/especificacion-tecnica.md) describe el objetivo completo;
-este primer incremento implementa la estructura, la generación sintética y la inspección binaria.
+el sprint 1 incorpora generación sintética, inspección, INDEX secuencial y búsqueda verificable.
+
+## Documentación y planificación
+
+- [Plan de cinco sprints hasta la entrega completa](docs/plan-sprints.md).
+- [Contrato, límites y evidencia del sprint 1](docs/sprint-1.md).
+- [Skills recomendadas y criterios de selección](docs/skills-recomendadas.md).
+- [Dónde se utilizaría el motor, con un ejemplo de telecomunicaciones](docs/aplicaciones-del-motor.md).
 
 ## Requisitos
 
@@ -28,6 +35,32 @@ python3 scripts/generate_cdr.py --output data --files 8 --total-size 8MiB
 java -cp build/classes com.hpc.lsdfms.Main inspect data
 python3 -m unittest discover -s tests -v
 ```
+
+## INDEX y búsqueda (sprint 1)
+
+Después de `make generate`:
+
+```sh
+java -cp build/classes com.hpc.lsdfms.Main index data
+java -cp build/classes com.hpc.lsdfms.Main search data 51987654321
+```
+
+`index` omite borrados y ordena tuplas completas por teléfono, fileId y offset;
+reemplaza el índice anterior solo tras escritura completa, cierre y movimiento
+atómico. `search` devuelve todas las coincidencias verificadas en TSV, seguidas de
+`TOTAL`; cero coincidencias es éxito. El payload se muestra como UTF-8 con escapes
+para barra inversa, tabulaciones y saltos de línea.
+
+Salidas: `0` éxito, `1` error de datos/I/O o presupuesto de memoria, `2` argumentos
+inválidos. No ejecutar operaciones simultáneas ni modificar los `.dat` entre
+indexación y consulta. Reconstruir el índice después de cualquier cambio.
+
+La ordenación es en memoria: dos pasadas de cabeceras y arreglos primitivos
+con límite conservador de un cuarto del heap máximo para entradas. Si se excede,
+se informa error sin sustituir el índice. La ordenación externa y los bloqueos
+de mantenimiento pertenecen a sprints posteriores. Una consulta materializa solo
+un payload a la vez (límite individual de un cuarto del heap máximo).
+Ver [contrato y límites](docs/sprint-1.md).
 
 ## Generación de datos
 
@@ -80,12 +113,13 @@ Big-Endian, sin alineación ni cabecera global. Cada registro:
 | 21 | `payload` (UTF-8) | `recordLength` |
 
 Python: `struct.Struct(">Biqq")`. Java: `CdrFormat`, `FileChannel` y buffer directo reutilizable.
-El formato previsto del índice es `long phoneNumber + int fileId + long byteOffset`
-(20 bytes); `IndexEntry` proporciona constantes y escritura, no construye aún el índice.
+El formato del índice es `long phoneNumber + int fileId + long byteOffset`
+(20 bytes); `SequentialEngine` lo construye utilizando la serialización de `IndexEntry`.
 
 `inspect` escanea únicamente archivos `F_<id>.dat` directamente dentro del directorio
 indicado (no recursivamente). Valida flags, longitudes y truncamientos, sin leer ni
-validar el contenido UTF-8 del payload. No sustituye al futuro verificador de índices.
+validar el contenido UTF-8 del payload. `search` verifica las referencias encontradas,
+pero no certifica por escaneo completo la integridad de un índice externo.
 No se deben modificar archivos durante la inspección.
 
 ## Estructura
@@ -94,11 +128,11 @@ No se deben modificar archivos durante la inspección.
 docs/especificacion-tecnica.md   Objetivos y criterios de aceptación
 scripts/generate_cdr.py          Generador streaming reproducible
 src/com/hpc/lsdfms/
-  Main.java                     CLI inicial: inspect y --help
+  Main.java                     CLI: inspect, index, search y --help
   model/                        Contrato CDR y serialización del índice
   io/                           Escaneo y validación estructural de archivos
-  core/                         Paquete reservado para motores INDEX/PACK
-  search/                       Paquete reservado para búsqueda binaria
+  core/                         INDEX secuencial sobre tuplas primitivas
+  search/                       Búsqueda binaria de rangos con verificación
 tests/                          Pruebas sin frameworks externos
 data/                           Datasets locales ignorados por Git
 build/                          Clases compiladas ignoradas por Git
@@ -110,12 +144,13 @@ build/                          Clases compiladas ignoradas por Git
 - [x] Generador configurable para datasets de 2–10 GiB; validación con muestras pequeñas.
 - [x] Inspección Java de archivos generados y pruebas automatizadas del contrato.
 - [ ] Ejecutar y medir generación de al menos 2 GiB en el equipo de evaluación.
-- [ ] `SequentialEngine`: `INDEX` y `PACK` de referencia.
+- [x] `SequentialEngine`: `INDEX` de referencia.
+- [ ] `SequentialEngine`: `PACK` de referencia.
 - [ ] `ParallelEngine`: `INDEX` concurrente y ordenación sobre primitivos.
-- [ ] Búsqueda binaria y verificación de `fileId`/`byteOffset`.
+- [x] Búsqueda binaria y verificación de `fileId`/`byteOffset`.
 - [ ] `PACK` paralelo, reemplazo atómico e invalidación/regeneración de índices.
 - [ ] Ordenación externa para índices mayores que la RAM y benchmarks de escalabilidad.
 
-El estado inicial **no representa la entrega del 50%**. No se incluyen motores vacíos
+El sprint 1 **no representa la entrega del 50%**. No se incluyen motores vacíos
 con operaciones aparentemente funcionales. La especificación conserva los criterios
 de aceptación como pendientes hasta validar los hitos correspondientes.

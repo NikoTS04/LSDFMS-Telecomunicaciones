@@ -1,50 +1,72 @@
 package com.hpc.lsdfms;
 
 import com.hpc.lsdfms.io.BinaryFileHandler;
+import com.hpc.lsdfms.io.DatasetFiles;
+import com.hpc.lsdfms.core.SequentialEngine;
+import com.hpc.lsdfms.search.BinaryIndexSearch;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Stream;
 
-/** CLI inicial. INDEX y PACK se incorporarán en los siguientes hitos. */
+/** CLI del motor secuencial y consulta; PACK no está implementado aún. */
 public final class Main {
     private Main() { }
 
     public static void main(String[] args) {
         if (args.length == 0 || (args.length == 1 && "--help".equals(args[0]))) {
-            System.out.println("Uso: java -cp build/classes com.hpc.lsdfms.Main inspect <directorio>");
+            System.out.println("Uso: java -cp build/classes com.hpc.lsdfms.Main "
+                    + "inspect|index <directorio>\n"
+                    + "     java -cp build/classes com.hpc.lsdfms.Main "
+                    + "search <directorio> <phoneNumber>\n"
+                    + "Salidas: 0 éxito, 1 error de datos/I/O, 2 argumentos inválidos.\n"
+                    + "Dataset inmutable; no ejecutar operaciones simultáneas. PACK pendiente.");
             return;
         }
-        if (args.length != 2 || !"inspect".equals(args[0])) {
-            System.err.println("Comando inválido. Usa --help. INDEX y PACK aún no están implementados.");
+        boolean valid = (args.length == 2
+                && ("inspect".equals(args[0]) || "index".equals(args[0])))
+                || (args.length == 3 && "search".equals(args[0]));
+        if (!valid) {
+            System.err.println("Comando inválido. Usa --help. PACK aún no está implementado.");
             System.exit(2);
             return;
         }
         try {
-            inspect(Path.of(args[1]));
-        } catch (IOException | IllegalArgumentException e) {
+            Path directory = Path.of(args[1]);
+            switch (args[0]) {
+                case "inspect" -> inspect(directory);
+                case "index" -> System.out.println("INDEX\t" + new SequentialEngine().index(directory));
+                case "search" -> search(directory, Long.parseLong(args[2]));
+                default -> throw new IllegalArgumentException("Comando inválido");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("Argumentos inválidos: " + e.getMessage());
+            System.exit(2);
+        } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
             System.exit(1);
         }
     }
 
+    private static void search(Path directory, long phone) throws IOException {
+        System.out.println("Telefono\tFileId\tOffset\tTimestamp\tPayload");
+        long matches = new BinaryIndexSearch().search(directory, phone, (fileId, offset, record) -> {
+            String payload = new String(record.payload(), StandardCharsets.UTF_8)
+                    .replace("\\", "\\\\").replace("\t", "\\t")
+                    .replace("\r", "\\r").replace("\n", "\\n");
+            System.out.printf("%d\t%d\t%d\t%d\t%s%n",
+                    record.phoneNumber(), fileId, offset, record.timestamp(), payload);
+        });
+        System.out.println("TOTAL\t" + matches);
+    }
+
     private static void inspect(Path directory) throws IOException {
-        List<Path> files;
-        try (Stream<Path> paths = Files.list(directory)) {
-            files = paths.filter(Files::isRegularFile)
-                    .filter(p -> p.getFileName().toString().matches("F_[1-9][0-9]*\\.dat"))
-                    .sorted(Comparator.comparing(Path::toString)).toList();
-        }
-        if (files.isEmpty()) {
-            throw new IOException("No hay archivos F_<id>.dat en " + directory);
-        }
+        var files = DatasetFiles.list(directory);
         long bytes = 0;
         long records = 0;
         long deleted = 0;
         System.out.println("Archivo\tBytes\tRegistros\tActivos\tBorrados");
-        for (Path file : files) {
+        for (var source : files) {
+            Path file = source.path();
             var stats = BinaryFileHandler.inspect(file);
             System.out.printf("%s\t%d\t%d\t%d\t%d%n", file.getFileName(), stats.bytes(),
                     stats.records(), stats.active(), stats.deleted());
