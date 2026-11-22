@@ -2,13 +2,15 @@
 
 Base para un motor de gestión de archivos CDR masivos en **Java 17+, sin dependencias externas**.
 La [especificación técnica](docs/especificacion-tecnica.md) describe el objetivo completo;
-el sprint 2 completa INDEX/PACK secuenciales, búsqueda verificable y recuperación de mantenimiento.
+el sprint 3 añade INDEX paralelo al baseline INDEX/PACK, búsqueda y recuperación.
 
 ## Documentación y planificación
 
 - [Plan de cinco sprints hasta la entrega completa](docs/plan-sprints.md).
 - [Contrato, límites y evidencia del sprint 1](docs/sprint-1.md).
 - [PACK, exclusión y recuperación del sprint 2](docs/sprint-2.md).
+- [Contrato de INDEX paralelo y medición del sprint 3](docs/sprint-3.md).
+- [Resultados y evidencia del hito del 50%](docs/resultados-50.md).
 - [Skills recomendadas y criterios de selección](docs/skills-recomendadas.md).
 - [Dónde se utilizaría el motor, con un ejemplo de telecomunicaciones](docs/aplicaciones-del-motor.md).
 
@@ -90,6 +92,38 @@ marcador manualmente. El reemplazo es atómico por archivo, no por dataset.
 Los temporales de una caída abrupta no se reutilizan ni se borran automáticamente.
 Ver [procedimiento, garantías y límites](docs/sprint-2.md).
 
+## INDEX paralelo (sprint 3)
+
+```sh
+java -Xmx1g -cp build/classes com.hpc.lsdfms.Main index-parallel data 4
+```
+
+Acepta 1–256 trabajadores, limitados al número de archivos. Cuenta y extrae
+cabeceras por archivo, ordena runs de tuplas primitivas en paralelo y las mezcla
+con un arreglo auxiliar. Produce el mismo `index_phone.idx` que el baseline.
+Los errores cancelan tareas y esperan su terminación antes de liberar el dataset.
+Rechaza mantenimiento pendiente y conserva el índice anterior si no puede terminar.
+
+El presupuesto de memoria incluye ambos juegos de arreglos (40 bytes por activo
+como máximo, más buffers/JVM fuera de ese presupuesto). La ordenación externa
+sigue pendiente. PACK/recover todavía usan el motor secuencial.
+
+Comparativa reproducible en un directorio de resultados **nuevo**:
+
+```sh
+make build
+python3 scripts/generate_cdr.py --output data/sprint3-2gib --files 8 --total-size 2GiB --deleted-ratio 0.20 --seed 42
+python3 scripts/benchmark_index.py data/sprint3-2gib --output docs/benchmarks/mi-ejecucion --workers 4 --heap 1g --warmups 1 --repetitions 5
+```
+
+No ejecutar PACK ni otros procesos sobre ese dataset durante el benchmark.
+El script guarda entorno, comandos, tiempos crudos, RSS mediante POSIX wait4
+(o GNU time si está disponible),
+hashes, validación de orden/conteos y muestreo reproducible de referencias.
+No vacía la caché del SO. Los tiempos incluyen el arranque de una JVM por ejecución,
+ambas pasadas, ordenación, escritura y `force`; las verificaciones quedan fuera.
+La generación masiva y el benchmark son explícitos, nunca parte de `make test`.
+
 ## Generación de datos
 
 Dataset para el hito del 50% (**8 archivos, al menos 2 GiB en total**, aproximadamente 20% borrados):
@@ -142,7 +176,7 @@ Big-Endian, sin alineación ni cabecera global. Cada registro:
 
 Python: `struct.Struct(">Biqq")`. Java: `CdrFormat`, `FileChannel` y buffer directo reutilizable.
 El formato del índice es `long phoneNumber + int fileId + long byteOffset`
-(20 bytes); `SequentialEngine` lo construye utilizando la serialización de `IndexEntry`.
+(20 bytes); ambos motores lo construyen utilizando la serialización de `IndexEntry`.
 
 `inspect` escanea únicamente archivos `F_<id>.dat` directamente dentro del directorio
 indicado (no recursivamente). Valida flags, longitudes y truncamientos, sin leer ni
@@ -155,11 +189,12 @@ No se deben modificar archivos durante la inspección.
 ```text
 docs/especificacion-tecnica.md   Objetivos y criterios de aceptación
 scripts/generate_cdr.py          Generador streaming reproducible
+scripts/benchmark_index.py       Comparativa y verificación del hito del 50%
 src/com/hpc/lsdfms/
-  Main.java                     CLI: inspect, index, search, pack, recover y --help
+  Main.java                     CLI: inspect, index, index-parallel, search, pack, recover, --help
   model/                        Contrato CDR y serialización del índice
   io/                           Escaneo, copia acotada, compactación y bloqueo de dataset
-  core/                         INDEX/PACK secuenciales y recuperación
+  core/                         INDEX secuencial/paralelo, PACK secuencial y recuperación
   search/                       Búsqueda binaria de rangos con verificación
 tests/                          Pruebas sin frameworks externos
 data/                           Datasets locales ignorados por Git
@@ -171,15 +206,14 @@ build/                          Clases compiladas ignoradas por Git
 - [x] Estructura compilable con JDK 17, sin Maven/Gradle ni librerías externas.
 - [x] Generador configurable para datasets de 2–10 GiB; validación con muestras pequeñas.
 - [x] Inspección Java de archivos generados y pruebas automatizadas del contrato.
-- [ ] Ejecutar y medir generación de al menos 2 GiB en el equipo de evaluación.
+- [x] Dataset de al menos 2 GiB generado y validado en el equipo disponible.
 - [x] `SequentialEngine`: `INDEX` de referencia.
 - [x] `SequentialEngine`: `PACK` de referencia, recuperación e integración con INDEX.
-- [ ] `ParallelEngine`: `INDEX` concurrente y ordenación sobre primitivos.
+- [x] `ParallelEngine`: `INDEX` concurrente y ordenación sobre primitivos.
 - [x] Búsqueda binaria y verificación de `fileId`/`byteOffset`.
 - [ ] `PACK` paralelo, reemplazo atómico e invalidación/regeneración de índices.
 - [ ] Ordenación externa para índices mayores que la RAM y benchmarks de escalabilidad.
 
-El sprint 2 **no representa aún la entrega del 50%**: faltan INDEX paralelo y
-mediciones masivas del sprint 3. No se incluyen motores vacíos
-con operaciones aparentemente funcionales. La especificación conserva los criterios
-de aceptación como pendientes hasta validar los hitos correspondientes.
+El sprint 3 completa los criterios técnicos del **hito del 50%** en este equipo,
+con pruebas y mediciones reales. No representa la entrega final: siguen pendientes
+PACK paralelo, ordenación externa y análisis completo de escalabilidad.

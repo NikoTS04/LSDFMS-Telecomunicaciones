@@ -130,6 +130,7 @@ class PackTest(unittest.TestCase):
             # lockf usa fcntl/record locks, compatibles con FileLock de Java en Linux.
             fcntl.lockf(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             for operation in (("search", self.directory, 7), ("index", self.directory),
+                              ("index-parallel", self.directory, 2),
                               ("pack", self.directory), ("recover", self.directory),
                               ("inspect", self.directory)):
                 result = self.java(*operation)

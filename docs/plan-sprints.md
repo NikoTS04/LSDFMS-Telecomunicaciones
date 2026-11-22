@@ -104,17 +104,17 @@ INDEX/búsqueda/inspección CLI ahora adquieren bloqueo de dataset.
 
 **Objetivo:** comparar una implementación concurrente correcta contra el baseline.
 
-- [ ] S3-01: implementar INDEX en `core/ParallelEngine.java` con
+- [x] S3-01: implementar INDEX en `core/ParallelEngine.java` con
   `ExecutorService`, tareas por archivo y buffers/canales propios.
-- [ ] S3-02: aceptar número de trabajadores configurable y limitar recursos;
+- [x] S3-02: aceptar número de trabajadores configurable y limitar recursos;
   propagar fallos de tareas, cancelar pendientes y cerrar el executor.
-- [ ] S3-03: implementar ordenación paralela de tuplas sobre primitivos
+- [x] S3-03: implementar ordenación paralela de tuplas sobre primitivos
   (por ejemplo, merge sort); preservar asociaciones y desempates.
-- [ ] S3-04: verificar igualdad byte a byte del índice secuencial y paralelo
+- [x] S3-04: verificar igualdad byte a byte del índice secuencial y paralelo
   para la misma entrada y política de orden.
-- [ ] S3-05: generar ≥8 archivos que sumen ≥2 GiB con semilla conocida y
+- [x] S3-05: generar ≥8 archivos que sumen ≥2 GiB con semilla conocida y
   aproximadamente 20% de borrados en el equipo de evaluación.
-- [ ] S3-06: medir INDEX secuencial/paralelo y verificar consultas contra el
+- [x] S3-06: medir INDEX secuencial/paralelo y verificar consultas contra el
   dataset; guardar configuración, resultados y metodología.
 
 **Aceptación del 50%:** generador masivo ejecutado, INDEX/PACK secuenciales
@@ -123,8 +123,9 @@ funcionales, INDEX paralelo, búsqueda/verificación y tabla de tiempos con
 Reportar también `S / Cores` para el criterio literal de la especificación si
 `p` difiere de los núcleos. No exigir ni inventar un speedup mínimo.
 
-**Evidencias previstas:** `docs/resultados-50.md` y resultados crudos con tamaño,
-conteos, comandos exactos y validación de integridad. Todavía no existen.
+**Cierre:** implementación y pruebas en [sprint-3.md](sprint-3.md), mediciones y
+evidencia del hito en [resultados-50.md](resultados-50.md). Se guardan tiempos
+crudos, configuración, entorno, hashes, conteos y muestreo reproducible de punteros.
 
 ## Sprint 4 · PACK paralelo y mantenimiento integrado
 
