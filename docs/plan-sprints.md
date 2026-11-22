@@ -131,21 +131,24 @@ crudos, configuración, entorno, hashes, conteos y muestreo reproducible de punt
 
 **Objetivo:** compactar concurrentemente sin publicar índices inconsistentes.
 
-- [ ] S4-01: distribuir archivos entre trabajadores usando la copia validada
+- [x] S4-01: distribuir archivos entre trabajadores usando la copia validada
   del sprint 2 y limitar canales abiertos y temporales simultáneos.
-- [ ] S4-02: integrar exclusión, marcador persistente, reemplazos y reconstrucción
+- [x] S4-02: integrar exclusión, marcador persistente, reemplazos y reconstrucción
   del índice; publicar el nuevo índice únicamente tras éxito completo.
-- [ ] S4-03: propagar fallos de cualquier trabajador y dejar un estado recuperable,
+- [x] S4-03: propagar fallos de cualquier trabajador y dejar un estado recuperable,
   sin comunicar éxito parcial como éxito global.
-- [ ] S4-04: comparar PACK secuencial/paralelo sobre copias idénticas del dataset;
+- [x] S4-04: comparar PACK secuencial/paralelo sobre copias idénticas del dataset;
   comprobar igualdad de archivos finales e índices reconstruidos.
-- [ ] S4-05: probar arranque tras fallo, cancelación, archivo corrupto y búsquedas
+- [x] S4-05: probar arranque tras fallo, cancelación, archivo corrupto y búsquedas
   rechazadas durante mantenimiento.
 
 **Aceptación:** PACK → INDEX automático, cero offsets obsoletos aceptados y
 recuperación documentada. Medir bytes recuperados, duración y recursos.
 El porcentaje de registros borrados no implica el mismo porcentaje de bytes:
 los payloads tienen longitud variable.
+
+**Cierre:** contrato, recuperación, pruebas y mediciones en [sprint-4.md](sprint-4.md).
+Rama `feat/sprint-4-parallel-pack`, basada en sprint 3 sin modificar `main`.
 
 ## Sprint 5 · Memoria acotada, escalabilidad y entrega
 

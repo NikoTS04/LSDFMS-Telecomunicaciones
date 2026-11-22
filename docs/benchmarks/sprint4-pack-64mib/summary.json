@@ -1,0 +1,36 @@
+{
+  "results": [
+    {
+      "engine": "sequential",
+      "workers": 1,
+      "median_seconds": 16.93179083799987,
+      "min_seconds": 15.187490904000015,
+      "max_seconds": 32.95642559099906,
+      "stdev_seconds": 7.331572828981845,
+      "speedup": 1.0,
+      "efficiency": 1.0,
+      "peak_rss_kib": 85744.0
+    },
+    {
+      "engine": "parallel",
+      "workers": 4,
+      "median_seconds": 8.74715678199999,
+      "min_seconds": 5.698046978999969,
+      "max_seconds": 16.121156791999965,
+      "stdev_seconds": 4.368626191994819,
+      "speedup": 1.9356907918744892,
+      "efficiency": 0.4839226979686223,
+      "peak_rss_kib": 107332.0
+    }
+  ],
+  "source_unchanged": true,
+  "bytes_before": 67110791,
+  "bytes_after": 53670560,
+  "reclaimed": 13440231,
+  "active": 157503,
+  "deleted_removed": 39469,
+  "index_sha256": "420675c39eb86380a84b99292181e29f80a7df986817bbf414ba01d577fa38a8",
+  "sampled_references_per_run": 1000,
+  "active_content": "SHA-256 completo por archivo contra or\u00e1culo Python",
+  "resumed": true
+}

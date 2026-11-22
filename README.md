@@ -2,7 +2,7 @@
 
 Base para un motor de gestión de archivos CDR masivos en **Java 17+, sin dependencias externas**.
 La [especificación técnica](docs/especificacion-tecnica.md) describe el objetivo completo;
-el sprint 3 añade INDEX paralelo al baseline INDEX/PACK, búsqueda y recuperación.
+el sprint 4 completa INDEX/PACK paralelos, búsqueda y recuperación de mantenimiento.
 
 ## Documentación y planificación
 
@@ -11,6 +11,7 @@ el sprint 3 añade INDEX paralelo al baseline INDEX/PACK, búsqueda y recuperaci
 - [PACK, exclusión y recuperación del sprint 2](docs/sprint-2.md).
 - [Contrato de INDEX paralelo y medición del sprint 3](docs/sprint-3.md).
 - [Resultados y evidencia del hito del 50%](docs/resultados-50.md).
+- [PACK paralelo, recuperación y evidencia del sprint 4](docs/sprint-4.md).
 - [Skills recomendadas y criterios de selección](docs/skills-recomendadas.md).
 - [Dónde se utilizaría el motor, con un ejemplo de telecomunicaciones](docs/aplicaciones-del-motor.md).
 
@@ -106,7 +107,8 @@ Rechaza mantenimiento pendiente y conserva el índice anterior si no puede termi
 
 El presupuesto de memoria incluye ambos juegos de arreglos (40 bytes por activo
 como máximo, más buffers/JVM fuera de ese presupuesto). La ordenación externa
-sigue pendiente. PACK/recover todavía usan el motor secuencial.
+sigue pendiente. `pack`/`recover` conservan el baseline secuencial; los comandos
+con sufijo `-parallel` usan el motor concurrente.
 
 Comparativa reproducible en un directorio de resultados **nuevo**:
 
@@ -123,6 +125,39 @@ hashes, validación de orden/conteos y muestreo reproducible de referencias.
 No vacía la caché del SO. Los tiempos incluyen el arranque de una JVM por ejecución,
 ambas pasadas, ordenación, escritura y `force`; las verificaciones quedan fuera.
 La generación masiva y el benchmark son explícitos, nunca parte de `make test`.
+
+## PACK paralelo (sprint 4)
+
+```sh
+java -Xmx1g -cp build/classes com.hpc.lsdfms.Main pack-parallel data 4
+# Solo si hay mantenimiento pendiente, también recuperable con "recover":
+java -Xmx1g -cp build/classes com.hpc.lsdfms.Main recover-parallel data 4
+```
+
+Compacta por archivo y reconstruye INDEX en paralelo sin liberar el bloqueo entre
+fases. Usa 1–256 trabajadores, limitados por el número de archivos y temporales.
+Comparte el protocolo seguro del baseline: marcador persistente, invalidación previa,
+temporales verificados, `force`, reemplazo atómico por archivo y reindexación final.
+
+Ante fallo cancela y espera a los trabajadores; puede dejar una mezcla de originales
+y compactados, pero las consultas quedan bloqueadas hasta recuperar. Los modos de
+recuperación secuencial y paralelo son intercambiables. No borrar el lock ni el marcador.
+Reservar disco para hasta `p` temporales simultáneos, además de índices y respaldos.
+Ver [garantías y límites](docs/sprint-4.md).
+
+Comparativa PACK → INDEX sobre copias nuevas, conservando la fuente:
+
+```sh
+python3 scripts/generate_cdr.py --output data/sprint4-pack-64mib --files 8 --total-size 64MiB --seed 42
+python3 scripts/benchmark_pack.py data/sprint4-pack-64mib --output docs/benchmarks/mi-pack --workers 4 --heap 1g --warmups 1 --repetitions 5
+```
+
+Usar directorios nuevos. Preparación de copias y verificaciones quedan fuera del
+tiempo medido. El script compara contenido activo por archivo contra un oráculo
+Python y verifica índices; guarda tiempos y recursos crudos.
+Si el benchmark se interrumpe, `--resume` continúa únicamente si coinciden fuentes,
+clases y configuración; archiva y repite ejecuciones sin evidencia completa.
+Los resultados y sus limitaciones están en [sprint-4.md](docs/sprint-4.md).
 
 ## Generación de datos
 
@@ -190,11 +225,12 @@ No se deben modificar archivos durante la inspección.
 docs/especificacion-tecnica.md   Objetivos y criterios de aceptación
 scripts/generate_cdr.py          Generador streaming reproducible
 scripts/benchmark_index.py       Comparativa y verificación del hito del 50%
+scripts/benchmark_pack.py        Comparativa PACK → INDEX sin modificar la fuente
 src/com/hpc/lsdfms/
-  Main.java                     CLI: inspect, index, index-parallel, search, pack, recover, --help
+  Main.java                     CLI: inspect, search, index/pack/recover y variantes -parallel
   model/                        Contrato CDR y serialización del índice
   io/                           Escaneo, copia acotada, compactación y bloqueo de dataset
-  core/                         INDEX secuencial/paralelo, PACK secuencial y recuperación
+  core/                         INDEX/PACK secuenciales/paralelos y protocolo de recuperación
   search/                       Búsqueda binaria de rangos con verificación
 tests/                          Pruebas sin frameworks externos
 data/                           Datasets locales ignorados por Git
@@ -211,9 +247,9 @@ build/                          Clases compiladas ignoradas por Git
 - [x] `SequentialEngine`: `PACK` de referencia, recuperación e integración con INDEX.
 - [x] `ParallelEngine`: `INDEX` concurrente y ordenación sobre primitivos.
 - [x] Búsqueda binaria y verificación de `fileId`/`byteOffset`.
-- [ ] `PACK` paralelo, reemplazo atómico e invalidación/regeneración de índices.
+- [x] `PACK` paralelo, reemplazo atómico e invalidación/regeneración de índices.
 - [ ] Ordenación externa para índices mayores que la RAM y benchmarks de escalabilidad.
 
 El sprint 3 completa los criterios técnicos del **hito del 50%** en este equipo,
 con pruebas y mediciones reales. No representa la entrega final: siguen pendientes
-PACK paralelo, ordenación externa y análisis completo de escalabilidad.
+ordenación externa y análisis completo de escalabilidad (sprint 5).

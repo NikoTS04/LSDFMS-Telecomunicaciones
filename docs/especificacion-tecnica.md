@@ -137,9 +137,11 @@ Evidencia de validación en el equipo disponible: [resultados del hito del 50%](
 
 El objetivo del 100% es entregar un sistema robusto, completamente paralelizado, libre de fugas de memoria/descriptores de archivo y con análisis de escalabilidad completo.
 
-* \[ \] **Implementación Paralela de `PACK()`:** Compactación multihilo funcional utilizando `FileChannel.transferTo()` y reemplazo atómico de archivos, reduciendo el tamaño en disco proporcionalmente al porcentaje de registros eliminados.
+* [x] **Implementación Paralela de `PACK()`:** Compactación multihilo funcional utilizando `FileChannel.transferTo()` y reemplazo atómico de archivos, reduciendo el tamaño en disco según los bytes de registros eliminados (los payloads tienen longitud variable).
 
-* \[ \] **Flujo Integrado (`PACK` -> `INDEX`):** Al ejecutar `PACK()`, el sistema actualiza automáticamente los índices afectados para evitar punteros corruptos (*dangling offsets*).
+* [x] **Flujo Integrado (`PACK` -> `INDEX`):** Al ejecutar `PACK()`, el sistema actualiza automáticamente los índices afectados para evitar punteros corruptos (*dangling offsets*).
+
+Evidencia de estos dos criterios: [sprint 4](sprint-4.md). Los restantes requisitos del 100% siguen pendientes.
 
 * \[ \] **Soporte Multi-Índice (Opcional/Plus):** Capacidad de generar índices secundarios en paralelo (ej. por `timestamp` además de `phoneNumber`).
 

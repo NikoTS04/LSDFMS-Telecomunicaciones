@@ -1,2 +1,2 @@
-/** INDEX secuencial/paralelo y PACK secuencial con recuperación bajo exclusión. */
+/** INDEX/PACK secuenciales y paralelos con recuperación y exclusión de dataset. */
 package com.hpc.lsdfms.core;
