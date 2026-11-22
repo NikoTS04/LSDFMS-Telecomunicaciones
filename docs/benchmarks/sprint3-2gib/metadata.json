@@ -1,0 +1,344 @@
+{
+  "date_utc": "2026-11-22T21:34:29.216275+00:00",
+  "platform": "Linux-6.18.60-3-cachyos-lts-x86_64-with-glibc2.44",
+  "logical_cpus": 16,
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "config": {
+    "dataset": "data/sprint3-2gib",
+    "output": "docs/benchmarks/sprint3-2gib",
+    "classes": "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+    "workers": [
+      4
+    ],
+    "heap": "1g",
+    "warmups": 1,
+    "repetitions": 5,
+    "samples": 1000,
+    "seed": 42,
+    "allow_small": false
+  },
+  "dataset_bytes": 2147485228,
+  "manifest": {
+    "schema_version": 1,
+    "format": {
+      "endianness": "big",
+      "header_bytes": 21,
+      "header_struct": ">Biqq"
+    },
+    "config": {
+      "files": 8,
+      "seed": 42,
+      "total_size": 2147483648,
+      "records_per_file": null,
+      "min_payload": 128,
+      "max_payload": 512,
+      "deleted_ratio": 0.2,
+      "start_timestamp_ms": 1735689600000
+    },
+    "files": [
+      {
+        "file_id": 1,
+        "name": "F_1.dat",
+        "bytes": 268435632,
+        "records": 787124,
+        "active": 629336,
+        "deleted": 157788
+      },
+      {
+        "file_id": 2,
+        "name": "F_2.dat",
+        "bytes": 268435644,
+        "records": 786842,
+        "active": 629625,
+        "deleted": 157217
+      },
+      {
+        "file_id": 3,
+        "name": "F_3.dat",
+        "bytes": 268435937,
+        "records": 787107,
+        "active": 629147,
+        "deleted": 157960
+      },
+      {
+        "file_id": 4,
+        "name": "F_4.dat",
+        "bytes": 268435629,
+        "records": 787381,
+        "active": 629921,
+        "deleted": 157460
+      },
+      {
+        "file_id": 5,
+        "name": "F_5.dat",
+        "bytes": 268435561,
+        "records": 787363,
+        "active": 630743,
+        "deleted": 156620
+      },
+      {
+        "file_id": 6,
+        "name": "F_6.dat",
+        "bytes": 268435631,
+        "records": 787246,
+        "active": 630570,
+        "deleted": 156676
+      },
+      {
+        "file_id": 7,
+        "name": "F_7.dat",
+        "bytes": 268435520,
+        "records": 787478,
+        "active": 629659,
+        "deleted": 157819
+      },
+      {
+        "file_id": 8,
+        "name": "F_8.dat",
+        "bytes": 268435674,
+        "records": 787084,
+        "active": 629288,
+        "deleted": 157796
+      }
+    ],
+    "totals": {
+      "bytes": 2147485228,
+      "records": 6297625,
+      "active": 5038289,
+      "deleted": 1259336
+    }
+  },
+  "timing": "Wall subprocess: inicio JVM, bloqueo, conteo, extracci\u00f3n, sort, escritura, force, cierre",
+  "cache": "No controlada; calentamiento previo por configuraci\u00f3n; sin vaciar cach\u00e9 SO",
+  "commands": {
+    "sequential-1-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib"
+    ],
+    "parallel-4-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib",
+      "4"
+    ],
+    "sequential-1-measured-1": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib"
+    ],
+    "parallel-4-measured-1": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib",
+      "4"
+    ],
+    "sequential-1-measured-2": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib"
+    ],
+    "parallel-4-measured-2": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib",
+      "4"
+    ],
+    "sequential-1-measured-3": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib"
+    ],
+    "parallel-4-measured-3": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib",
+      "4"
+    ],
+    "sequential-1-measured-4": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib"
+    ],
+    "parallel-4-measured-4": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib",
+      "4"
+    ],
+    "sequential-1-measured-5": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib"
+    ],
+    "parallel-4-measured-5": [
+      "/usr/bin/java",
+      "-Xmx1g",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib",
+      "4"
+    ]
+  },
+  "jdk": {
+    "command": [
+      "java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"27.0.1.1\" 2026-11-17\nOpenJDK Runtime Environment (build 27.0.1.1)\nOpenJDK 64-Bit Server VM (build 27.0.1.1, mixed mode, sharing)\n"
+  },
+  "cpu": {
+    "command": [
+      "lscpu"
+    ],
+    "returncode": 0,
+    "stdout": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  16\nOn-line CPU(s) list:                     0-15\nVendor ID:                               AuthenticAMD\nModel name:                              AMD Ryzen 7 7735HS with Radeon Graphics\nCPU family:                              25\nModel:                                   68\nThread(s) per core:                      2\nCore(s) per socket:                      8\nSocket(s):                               1\nStepping:                                1\nMicrocode version:                       0xa404108\nFrequency boost:                         enabled\nCPU(s) scaling MHz:                      36%\nCPU max MHz:                             4830.6001\nCPU min MHz:                             407.4000\nBogoMIPS:                                6387.64\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap\nVirtualization:                          AMD-V\nL1d cache:                               256 KiB (8 instances)\nL1i cache:                               256 KiB (8 instances)\nL2 cache:                                4 MiB (8 instances)\nL3 cache:                                16 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-15\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Mitigation; Safe RET\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Mitigation; Clear CPU buffers\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Mitigation; IBPB before exit to userspace\n",
+    "stderr": ""
+  },
+  "memory": {
+    "command": [
+      "free",
+      "-b"
+    ],
+    "returncode": 0,
+    "stdout": "               total        used        free      shared  buff/cache   available\nMem:     14311337984  4729450496   319569920   112848896  9728589824  9581887488\nSwap:    14310961152     3067904 14307893248\n",
+    "stderr": ""
+  },
+  "filesystem": {
+    "command": [
+      "df",
+      "-T",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint3-2gib"
+    ],
+    "returncode": 0,
+    "stdout": "Filesystem     Type  1K-blocks      Used Available Use% Mounted on\n/dev/nvme0n1p2 btrfs 498008372 450711896  45031080  91% /home\n",
+    "stderr": ""
+  },
+  "block_devices": {
+    "command": [
+      "lsblk",
+      "-d",
+      "-o",
+      "NAME,MODEL,ROTA"
+    ],
+    "returncode": 0,
+    "stdout": "NAME    MODEL                           ROTA\nzram0                                      0\nnvme0n1 WD PC SN5000S SDEPMSJ-512G-1101    0\n",
+    "stderr": ""
+  },
+  "jvm_system": {
+    "command": [
+      "java",
+      "-XshowSettings:system",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "Operating System Metrics:\n    Provider: cgroupv2\n    System not containerized.\nopenjdk version \"27.0.1.1\" 2026-11-17\nOpenJDK Runtime Environment (build 27.0.1.1)\nOpenJDK 64-Bit Server VM (build 27.0.1.1, mixed mode, sharing)\n"
+  },
+  "git": {
+    "command": [
+      "git",
+      "-C",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones",
+      "rev-parse",
+      "HEAD"
+    ],
+    "returncode": 0,
+    "stdout": "7b3e9634d7ac05739067a12fb66e32555e17e3c3\n",
+    "stderr": ""
+  },
+  "git_status": {
+    "command": [
+      "git",
+      "-C",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones",
+      "status",
+      "--short"
+    ],
+    "returncode": 0,
+    "stdout": " M src/com/hpc/lsdfms/Main.java\n M src/com/hpc/lsdfms/core/SequentialEngine.java\n?? docs/sprint-3.md\n?? scripts/benchmark_index.py\n?? src/com/hpc/lsdfms/core/IndexTuples.java\n?? src/com/hpc/lsdfms/core/IndexWriter.java\n?? src/com/hpc/lsdfms/core/ParallelEngine.java\n?? tests/test_parallel_index.py\n",
+    "stderr": ""
+  },
+  "java_source_sha256": {
+    "src/com/hpc/lsdfms/Main.java": "960fe8554720da5b335ad3afd17498638951b0fba43c473cf3c252476ce57291",
+    "src/com/hpc/lsdfms/core/IndexTuples.java": "54467a22c890dc6689ff73aceec980dbb417f22c3e2667da662bd38785cd2371",
+    "src/com/hpc/lsdfms/core/IndexWriter.java": "6779743f647d4aac6a9db86c93b1ba3fe569773f0a8cca8be1cd4a64eb10e733",
+    "src/com/hpc/lsdfms/core/ParallelEngine.java": "372b1dd8f2477bfbd8382d0c19c5533479c5999ed35994662759a9d398a4cd9c",
+    "src/com/hpc/lsdfms/core/SequentialEngine.java": "fb76b558e62f653d43b99cd329e354b685a0c2bcb0183bbc5279bf9a26d8c7e6",
+    "src/com/hpc/lsdfms/core/package-info.java": "ad2842836385455efa720561e2457017b5c1281fbc3a054963a1462838afc450",
+    "src/com/hpc/lsdfms/io/BinaryFileHandler.java": "3e9c9fbe0d4e1c1ba73b1f0b06d101960ed16086a21f5cbb3cc2fb0c0dcf607f",
+    "src/com/hpc/lsdfms/io/DatasetAccess.java": "200593dc8eb31ba832087b63cb5ef49e9a2b64c3a81593ab77a7fdc33cd902f0",
+    "src/com/hpc/lsdfms/io/DatasetFiles.java": "202888fe68611ab8c39fd55619ec59a22bc9ed7ff87218c039152246c2ec4100",
+    "src/com/hpc/lsdfms/io/FileCompactor.java": "d8887fa48f43cec194a5cbe6d7601c4f4a5ac6faed2a92c336f67af6729d0afe",
+    "src/com/hpc/lsdfms/io/FileTransfers.java": "7d0ec742d0d6c4c4eecf6065949846a88ee5e72becd7732f9f36776c4f732d4a",
+    "src/com/hpc/lsdfms/model/CdrFormat.java": "9f51a78200783e6964320045822ef31bc3acacb2e73c0a2f1ee52dca34e9bb66",
+    "src/com/hpc/lsdfms/model/IndexEntry.java": "5fbcca083d51863cdf1197bcc28de38c47922ca6a63e623e8b93d6b8f3feef63",
+    "src/com/hpc/lsdfms/search/BinaryIndexSearch.java": "a01a1c98c24126691a80cf0bcf82854c2e9d79d556c81af300509462ad28a4f2",
+    "src/com/hpc/lsdfms/search/package-info.java": "d8a08981bf79f67893b8e29f30c3d0b8e68142ef52a92e8ac999a176974778df"
+  }
+}

@@ -121,15 +121,17 @@ lsdfms-telecom/
 
 El objetivo del 50% es demostrar la viabilidad de la arquitectura, el manejo correcto de archivos binarios de longitud variable y los primeros resultados comparativos de rendimiento.
 
-* \[ \] **Generador de Datos Funcional:** Script `generate_cdr.py` capaz de generar al menos $N=8$ archivos binarios que sumen $\ge 2\text{ GB}$ de datos telefónicos con registros de longitud variable y un \~20% de registros marcados con `isDeleted = 1`.
+* [x] **Generador de Datos Funcional:** Script `generate_cdr.py` capaz de generar al menos $N=8$ archivos binarios que sumen $\ge 2\text{ GB}$ de datos telefónicos con registros de longitud variable y un \~20% de registros marcados con `isDeleted = 1`.
 
-* \[ \] **Motor Secuencial (Baseline) Completo:** Implementación funcional en 1 hilo de `INDEX()` y `PACK()` para establecer la línea base de tiempos de ejecución ($T_{\text{seq}}$).
+* [x] **Motor Secuencial (Baseline) Completo:** Implementación funcional en 1 hilo de `INDEX()` y `PACK()` para establecer la línea base de tiempos de ejecución ($T_{\text{seq}}$).
 
-* \[ \] **Implementación Paralela de `INDEX()`:** Versión multihilo funcional utilizando `ExecutorService` y `FileChannel`, generando el archivo `index_phone.idx` válido y ordenado.
+* [x] **Implementación Paralela de `INDEX()`:** Versión multihilo funcional utilizando `ExecutorService` y `FileChannel`, generando el archivo `index_phone.idx` válido y ordenado.
 
-* \[ \] **Verificador de Integridad:** Módulo de búsqueda binaria que lee `index_phone.idx`, localiza un `phoneNumber` aleatorio en $O(\log n)$, va al `fileId` y `byteOffset` en el archivo `.dat`, y verifica que los datos leídos coinciden y tienen `isDeleted == 0`.
+* [x] **Verificador de Integridad:** Módulo de búsqueda binaria que lee `index_phone.idx`, localiza un `phoneNumber` aleatorio en $O(\log n)$, va al `fileId` y `byteOffset` en el archivo `.dat`, y verifica que los datos leídos coinciden y tienen `isDeleted == 0`.
 
-* \[ \] **Métricas Iniciales:** Tabla comparativa en consola o documento mostrando $T_{\text{seq}}$ vs $T_{\text{par}}$ para `INDEX()`, calculando el **Speedup** ($S = T_{\text{seq}} / T_{\text{par}}$) y la **Eficiencia** ($E = S / \text{Cores}$).
+* [x] **Métricas Iniciales:** Tabla comparativa en consola o documento mostrando $T_{\text{seq}}$ vs $T_{\text{par}}$ para `INDEX()`, calculando el **Speedup** ($S = T_{\text{seq}} / T_{\text{par}}$) y la **Eficiencia** ($E = S / \text{Cores}$).
+
+Evidencia de validación en el equipo disponible: [resultados del hito del 50%](resultados-50.md).
 
 ### 5.2. Estado de Listo: Entrega Final del 100%
 

@@ -1,0 +1,77 @@
+{
+  "results": [
+    {
+      "engine": "sequential",
+      "requested_workers": 1,
+      "effective_workers": 1,
+      "median_seconds": 11.81225879900012,
+      "min_seconds": 11.584068808000666,
+      "max_seconds": 12.077263483999559,
+      "stdev_seconds": 0.18558340240004734,
+      "speedup": 1.0,
+      "efficiency_workers": 1.0,
+      "efficiency_logical_cores": 0.0625,
+      "peak_rss_kib": null
+    },
+    {
+      "engine": "parallel",
+      "requested_workers": 4,
+      "effective_workers": 4,
+      "median_seconds": 4.767413280000255,
+      "min_seconds": 4.690984892000415,
+      "max_seconds": 4.826764075000028,
+      "stdev_seconds": 0.06295082597236096,
+      "speedup": 2.477708162737569,
+      "efficiency_workers": 0.6194270406843922,
+      "efficiency_logical_cores": 0.15485676017109806,
+      "peak_rss_kib": null
+    }
+  ],
+  "sha256": "0144b024eea462517d2bd581eb2d161a3e52d4dc04a1492081c07d3b5f9d6fd9",
+  "validation": {
+    "entries": 5038289,
+    "sampled_references_per_run": 1000,
+    "query_checks": [
+      {
+        "phone": 51918508475,
+        "matches": 1
+      },
+      {
+        "phone": 51904153027,
+        "matches": 1
+      },
+      {
+        "phone": 51945761085,
+        "matches": 1
+      },
+      {
+        "phone": 51940735627,
+        "matches": 1
+      },
+      {
+        "phone": 51937133352,
+        "matches": 1
+      },
+      {
+        "phone": 51923209412,
+        "matches": 1
+      },
+      {
+        "phone": 51917049070,
+        "matches": 1
+      },
+      {
+        "phone": 51990804694,
+        "matches": 1
+      },
+      {
+        "phone": 51914465224,
+        "matches": 1
+      },
+      {
+        "phone": 51998312829,
+        "matches": 2
+      }
+    ]
+  }
+}

@@ -4,12 +4,13 @@ import com.hpc.lsdfms.io.BinaryFileHandler;
 import com.hpc.lsdfms.io.DatasetFiles;
 import com.hpc.lsdfms.io.DatasetAccess;
 import com.hpc.lsdfms.core.SequentialEngine;
+import com.hpc.lsdfms.core.ParallelEngine;
 import com.hpc.lsdfms.search.BinaryIndexSearch;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
-/** CLI del motor secuencial con exclusión y recuperación de mantenimiento. */
+/** CLI de INDEX secuencial/paralelo y PACK con exclusión y recuperación. */
 public final class Main {
     private Main() { }
 
@@ -19,6 +20,8 @@ public final class Main {
                     + "inspect|index|pack|recover <directorio>\n"
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "search <directorio> <phoneNumber>\n"
+                    + "     java -cp build/classes com.hpc.lsdfms.Main "
+                    + "index-parallel <directorio> <trabajadores:1-256>\n"
                     + "Salidas: 0 éxito, 1 error de datos/I/O, 2 argumentos inválidos.\n"
                     + "Bloqueo exclusivo por dataset; recover completa mantenimiento pendiente.");
             return;
@@ -26,7 +29,8 @@ public final class Main {
         boolean valid = (args.length == 2
                 && ("inspect".equals(args[0]) || "index".equals(args[0])
                         || "pack".equals(args[0]) || "recover".equals(args[0])))
-                || (args.length == 3 && "search".equals(args[0]));
+                || (args.length == 3
+                        && ("search".equals(args[0]) || "index-parallel".equals(args[0])));
         if (!valid) {
             System.err.println("Comando inválido. Usa --help.");
             System.exit(2);
@@ -37,6 +41,8 @@ public final class Main {
             switch (args[0]) {
                 case "inspect" -> inspect(directory);
                 case "index" -> System.out.println("INDEX\t" + new SequentialEngine().index(directory));
+                case "index-parallel" -> System.out.println("INDEX_PARALLEL\t"
+                        + new ParallelEngine(Integer.parseInt(args[2])).index(directory));
                 case "pack", "recover" -> {
                     SequentialEngine engine = new SequentialEngine();
                     var stats = "pack".equals(args[0]) ? engine.pack(directory) : engine.recover(directory);
