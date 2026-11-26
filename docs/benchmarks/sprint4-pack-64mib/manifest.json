@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "format": {
+    "endianness": "big",
+    "header_bytes": 21,
+    "header_struct": ">Biqq"
+  },
+  "config": {
+    "files": 8,
+    "seed": 42,
+    "total_size": 67108864,
+    "records_per_file": null,
+    "min_payload": 128,
+    "max_payload": 512,
+    "deleted_ratio": 0.2,
+    "start_timestamp_ms": 1735689600000
+  },
+  "files": [
+    {
+      "file_id": 1,
+      "name": "F_1.dat",
+      "bytes": 8388902,
+      "records": 24505,
+      "active": 19606,
+      "deleted": 4899
+    },
+    {
+      "file_id": 2,
+      "name": "F_2.dat",
+      "bytes": 8388688,
+      "records": 24622,
+      "active": 19627,
+      "deleted": 4995
+    },
+    {
+      "file_id": 3,
+      "name": "F_3.dat",
+      "bytes": 8388873,
+      "records": 24681,
+      "active": 19772,
+      "deleted": 4909
+    },
+    {
+      "file_id": 4,
+      "name": "F_4.dat",
+      "bytes": 8389005,
+      "records": 24580,
+      "active": 19676,
+      "deleted": 4904
+    },
+    {
+      "file_id": 5,
+      "name": "F_5.dat",
+      "bytes": 8388991,
+      "records": 24715,
+      "active": 19621,
+      "deleted": 5094
+    },
+    {
+      "file_id": 6,
+      "name": "F_6.dat",
+      "bytes": 8388687,
+      "records": 24611,
+      "active": 19695,
+      "deleted": 4916
+    },
+    {
+      "file_id": 7,
+      "name": "F_7.dat",
+      "bytes": 8388896,
+      "records": 24691,
+      "active": 19781,
+      "deleted": 4910
+    },
+    {
+      "file_id": 8,
+      "name": "F_8.dat",
+      "bytes": 8388749,
+      "records": 24567,
+      "active": 19725,
+      "deleted": 4842
+    }
+  ],
+  "totals": {
+    "bytes": 67110791,
+    "records": 196972,
+    "active": 157503,
+    "deleted": 39469
+  }
+}

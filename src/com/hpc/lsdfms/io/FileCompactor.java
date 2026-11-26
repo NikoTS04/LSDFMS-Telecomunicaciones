@@ -2,6 +2,7 @@ package com.hpc.lsdfms.io;
 
 import com.hpc.lsdfms.model.CdrFormat;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -13,6 +14,7 @@ public final class FileCompactor {
 
     public static void compact(Path source, Path temporary) throws IOException {
         long[] copied = {0};
+        ByteBuffer fallback = ByteBuffer.allocateDirect(64 * 1024);
         BinaryFileHandler.FileStats stats;
         try (FileChannel input = FileChannel.open(source, StandardOpenOption.READ,
                 LinkOption.NOFOLLOW_LINKS);
@@ -21,7 +23,7 @@ public final class FileCompactor {
             stats = BinaryFileHandler.scanRecords(source, (deleted, length, phone, offset) -> {
                 if (!deleted) {
                     long bytes = (long) CdrFormat.HEADER_BYTES + length;
-                    FileTransfers.copy(input, output, offset, bytes);
+                    FileTransfers.copy(input, output, offset, bytes, fallback);
                     copied[0] += bytes;
                 }
             });

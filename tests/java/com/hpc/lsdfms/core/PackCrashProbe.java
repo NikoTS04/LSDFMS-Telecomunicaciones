@@ -8,10 +8,11 @@ public final class PackCrashProbe {
     private PackCrashProbe() { }
 
     public static void main(String[] args) throws Exception {
-        new SequentialEngine(new SequentialEngine.Operations() {
+        SequentialEngine.Operations operations = new SequentialEngine.Operations() {
             @Override
             public void replace(Path temporary, Path target) throws IOException {
-                if (target.getFileName().toString().endsWith(".dat")) {
+                boolean data = target.getFileName().toString().endsWith(".dat");
+                if (("index".equals(args[1]) && !data) || (!"index".equals(args[1]) && data)) {
                     if ("after".equals(args[1])) {
                         SequentialEngine.Operations.super.replace(temporary, target);
                     }
@@ -23,6 +24,11 @@ public final class PackCrashProbe {
                 }
                 SequentialEngine.Operations.super.replace(temporary, target);
             }
-        }).pack(Path.of(args[0]));
+        };
+        if (args.length > 2 && "parallel".equals(args[2])) {
+            new ParallelEngine(2, operations).pack(Path.of(args[0]));
+        } else {
+            new SequentialEngine(operations).pack(Path.of(args[0]));
+        }
     }
 }

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.LinkOption;
 
 /** INDEX/PACK baseline, un hilo y exclusión cooperativa por dataset. */
 public final class SequentialEngine {
@@ -58,49 +57,8 @@ public final class SequentialEngine {
 
     private PackStats maintain(Path directory, boolean recovery) throws IOException {
         try (DatasetAccess access = DatasetAccess.acquire(directory)) {
-            directory = access.directory();
-            if (recovery) {
-                access.requireRecovery();
-            } else {
-                access.requireReady();
-            }
-            var sources = DatasetFiles.list(directory);
-            long before = 0;
-            long active = 0;
-            // Preflight completo antes de invalidar un índice existente.
-            for (var source : sources) {
-                var stats = BinaryFileHandler.inspect(source.path());
-                before += stats.bytes();
-                active += stats.active();
-            }
-            if (!recovery) {
-                access.beginMaintenance();
-            }
-            Path index = directory.resolve(INDEX_NAME);
-            if (Files.exists(index, LinkOption.NOFOLLOW_LINKS)
-                    && !Files.isRegularFile(index, LinkOption.NOFOLLOW_LINKS)) {
-                throw new IOException("Destino de índice no regular: " + index);
-            }
-            // El marcador persistente ya bloquea consultas incluso si esta eliminación falla.
-            Files.deleteIfExists(index);
-            long after = 0;
-            for (var source : sources) {
-                Path temporary = Files.createTempFile(directory,
-                        ".lsdfms-pack-F_" + source.id() + "-", ".tmp");
-                try {
-                    operations.compact(source.path(), temporary);
-                    after += Files.size(temporary);
-                    operations.replace(temporary, source.path());
-                } finally {
-                    Files.deleteIfExists(temporary);
-                }
-            }
-            long indexed = indexLocked(directory);
-            if (indexed != active) {
-                throw new IOException("Conteo de activos cambió durante PACK");
-            }
-            access.finishMaintenance();
-            return new PackStats(before, after, active);
+            return PackMaintenance.execute(access, recovery, DatasetFiles.list(access.directory()),
+                    operations, PackMaintenance::sequential, (root, sources) -> indexLocked(root));
         }
     }
 

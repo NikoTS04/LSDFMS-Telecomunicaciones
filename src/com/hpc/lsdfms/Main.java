@@ -21,7 +21,7 @@ public final class Main {
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "search <directorio> <phoneNumber>\n"
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
-                    + "index-parallel <directorio> <trabajadores:1-256>\n"
+                    + "index-parallel|pack-parallel|recover-parallel <directorio> <trabajadores:1-256>\n"
                     + "Salidas: 0 éxito, 1 error de datos/I/O, 2 argumentos inválidos.\n"
                     + "Bloqueo exclusivo por dataset; recover completa mantenimiento pendiente.");
             return;
@@ -30,7 +30,9 @@ public final class Main {
                 && ("inspect".equals(args[0]) || "index".equals(args[0])
                         || "pack".equals(args[0]) || "recover".equals(args[0])))
                 || (args.length == 3
-                        && ("search".equals(args[0]) || "index-parallel".equals(args[0])));
+                        && ("search".equals(args[0]) || "index-parallel".equals(args[0])
+                                || "pack-parallel".equals(args[0])
+                                || "recover-parallel".equals(args[0])));
         if (!valid) {
             System.err.println("Comando inválido. Usa --help.");
             System.exit(2);
@@ -49,6 +51,15 @@ public final class Main {
                     System.out.printf("%s\t%d\t%d\t%d\t%d%n",
                             "pack".equals(args[0]) ? "PACK" : "RECOVER", stats.bytesBefore(),
                             stats.bytesAfter(), stats.reclaimedBytes(), stats.activeRecords());
+                }
+                case "pack-parallel", "recover-parallel" -> {
+                    ParallelEngine engine = new ParallelEngine(Integer.parseInt(args[2]));
+                    var stats = "pack-parallel".equals(args[0])
+                            ? engine.pack(directory) : engine.recover(directory);
+                    System.out.printf("%s\t%d\t%d\t%d\t%d%n",
+                            "pack-parallel".equals(args[0]) ? "PACK_PARALLEL" : "RECOVER_PARALLEL",
+                            stats.bytesBefore(), stats.bytesAfter(), stats.reclaimedBytes(),
+                            stats.activeRecords());
                 }
                 case "search" -> search(directory, Long.parseLong(args[2]));
                 default -> throw new IllegalArgumentException("Comando inválido");

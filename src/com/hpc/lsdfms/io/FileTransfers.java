@@ -23,8 +23,22 @@ public final class FileTransfers {
         copy(source, target, position, count, FileChannel::transferTo);
     }
 
+    /** El compactador reutiliza un fallback por archivo, no uno por registro. */
+    static void copy(FileChannel source, FileChannel target, long position, long count,
+            ByteBuffer fallback) throws IOException {
+        if (fallback.capacity() == 0) {
+            throw new IOException("Buffer de copia vacío");
+        }
+        copy(source, target, position, count, FileChannel::transferTo, fallback);
+    }
+
     static void copy(FileChannel source, FileChannel target, long position, long count,
             Transfer transfer) throws IOException {
+        copy(source, target, position, count, transfer, null);
+    }
+
+    private static void copy(FileChannel source, FileChannel target, long position, long count,
+            Transfer transfer, ByteBuffer fallback) throws IOException {
         if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedIOException("Copia interrumpida");
         }
@@ -32,7 +46,6 @@ public final class FileTransfers {
                 || count > source.size() - position) {
             throw new IOException("Rango de transferencia fuera de límites");
         }
-        ByteBuffer fallback = null;
         while (count > 0) {
             if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedIOException("Copia interrumpida");
@@ -47,7 +60,7 @@ public final class FileTransfers {
                     fallback = ByteBuffer.allocateDirect(BUFFER_BYTES);
                 }
                 fallback.clear();
-                fallback.limit((int) Math.min(count, BUFFER_BYTES));
+                fallback.limit((int) Math.min(count, fallback.capacity()));
                 BinaryFileHandler.readFully(source, fallback, position);
                 fallback.flip();
                 copied = fallback.remaining();
