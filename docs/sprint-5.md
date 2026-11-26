@@ -67,3 +67,8 @@ una ejecución por motor demuestra viabilidad, no speedup estable.
 - Informe final de recursos, limitaciones y recuperación.
 
 No se marca la entrega del 100% hasta completar estas evidencias.
+
+Actualización: el caso masivo INDEX de ambos motores terminó correctamente:
+índice de **808.376.620 bytes** bajo `-Xmx512m`. Recursos, hash y límites en
+[resultados-finales.md](resultados-finales.md). La matriz de escalabilidad INDEX
+está en ejecución; PACK masivo y el resto del cierre siguen pendientes.
