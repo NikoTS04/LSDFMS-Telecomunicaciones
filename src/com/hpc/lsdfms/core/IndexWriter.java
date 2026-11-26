@@ -22,22 +22,7 @@ final class IndexWriter {
             throws IOException {
         Path temporary = Files.createTempFile(directory, ".index-phone-", ".tmp");
         try {
-            try (FileChannel output = FileChannel.open(temporary, StandardOpenOption.WRITE,
-                    StandardOpenOption.TRUNCATE_EXISTING)) {
-                ByteBuffer buffer = ByteBuffer.allocateDirect(64 * 1024)
-                        .order(CdrFormat.BYTE_ORDER);
-                for (int i = 0; i < tuples.size; i++) {
-                    if ((i & 4095) == 0) {
-                        IndexTuples.checkInterrupted();
-                    }
-                    if (buffer.remaining() < IndexEntry.BYTES) {
-                        flush(output, buffer);
-                    }
-                    IndexEntry.write(buffer, tuples.keys[i], tuples.fileIds[i], tuples.offsets[i]);
-                }
-                flush(output, buffer);
-                output.force(true);
-            }
+            write(temporary, tuples, tuples.size);
             IndexTuples.checkInterrupted();
             replacement.replace(temporary, directory.resolve(SequentialEngine.INDEX_NAME));
         } finally {
@@ -45,7 +30,26 @@ final class IndexWriter {
         }
     }
 
-    private static void flush(FileChannel output, ByteBuffer buffer) throws IOException {
+    static void write(Path temporary, IndexTuples tuples, int count) throws IOException {
+        try (FileChannel output = FileChannel.open(temporary, StandardOpenOption.WRITE,
+                StandardOpenOption.TRUNCATE_EXISTING)) {
+            ByteBuffer buffer = ByteBuffer.allocateDirect(64 * 1024)
+                    .order(CdrFormat.BYTE_ORDER);
+            for (int i = 0; i < count; i++) {
+                if ((i & 4095) == 0) {
+                    IndexTuples.checkInterrupted();
+                }
+                if (buffer.remaining() < IndexEntry.BYTES) {
+                    flush(output, buffer);
+                }
+                IndexEntry.write(buffer, tuples.keys[i], tuples.fileIds[i], tuples.offsets[i]);
+            }
+            flush(output, buffer);
+            output.force(true);
+        }
+    }
+
+    static void flush(FileChannel output, ByteBuffer buffer) throws IOException {
         buffer.flip();
         while (buffer.hasRemaining()) {
             if (output.write(buffer) <= 0) {

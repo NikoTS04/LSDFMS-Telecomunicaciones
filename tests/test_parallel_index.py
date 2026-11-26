@@ -33,7 +33,7 @@ class ParallelIndexTest(unittest.TestCase):
         self.directory = Path(self.temp.name)
 
     def java(self, *args, main="com.hpc.lsdfms.Main", heap="128m"):
-        return subprocess.run(["java", f"-Xmx{heap}", "-cp", self.classes.name,
+        return subprocess.run(["java", f"-Xmx{heap}", "-Dlsdfms.index.mode=memory", "-cp", self.classes.name,
                                main, *map(str, args)], capture_output=True, text=True, timeout=30)
 
     def write(self, file_id, keys):
@@ -159,3 +159,70 @@ class ParallelIndexTest(unittest.TestCase):
         self.assertEqual(len((output / "runs.csv").read_text().splitlines()), 5)
         result = subprocess.run(command, capture_output=True, text=True, timeout=30)
         self.assertNotEqual(result.returncode, 0, "No debe sobrescribir resultados existentes")
+
+    def test_external_multiple_passes_and_pack(self):
+        expected = []
+        for file_id in (1, 3, 10):
+            expected.extend(self.write(file_id, [i % 13 for i in reversed(range(300))]))
+        command = ["java", "-Xmx32m", "-Dlsdfms.index.mode=external",
+                   "-Dlsdfms.index.memoryMiB=4", "-Dlsdfms.index.chunkEntries=17",
+                   "-Dlsdfms.index.fanIn=2", "-cp", self.classes.name, "com.hpc.lsdfms.Main"]
+        for operation in (["index", str(self.directory)],
+                          ["index-parallel", str(self.directory), "3"]):
+            result = subprocess.run(command + operation, capture_output=True, text=True, timeout=30)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(list(ENTRY.iter_unpack(
+                (self.directory / "index_phone.idx").read_bytes())), sorted(expected))
+            self.assertFalse(list(self.directory.glob(".lsdfms-index-*")))
+        reference = self.directory / "reference"
+        reference.mkdir()
+        for path in self.directory.glob("F_*.dat"):
+            shutil.copyfile(path, reference / path.name)
+        self.assertEqual(self.java("pack", reference).returncode, 0)
+        result = subprocess.run(command + ["pack-parallel", str(self.directory), "3"],
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for path in reference.glob("*.dat"):
+            self.assertEqual(path.read_bytes(), (self.directory / path.name).read_bytes())
+        self.assertEqual((reference / "index_phone.idx").read_bytes(),
+                         (self.directory / "index_phone.idx").read_bytes())
+
+    def test_automatic_external_under_small_heap(self):
+        with (self.directory / "F_1.dat").open("wb") as stream:
+            for _ in range(30):
+                stream.write(HEADER.pack(0, 0, 7, 0) * 10000)
+        result = subprocess.run(["java", "-Xmx32m", "-cp", self.classes.name,
+                                 "com.hpc.lsdfms.Main", "index-parallel",
+                                 str(self.directory), "2"],
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual((self.directory / "index_phone.idx").stat().st_size, 6000000)
+        self.assertFalse(list(self.directory.glob(".lsdfms-index-*")))
+
+    def test_external_worker_failures_and_recovery(self):
+        for main in ("ParallelFailureTest", "ParallelPackFaultTest"):
+            target = self.directory / main
+            target.mkdir()
+            result = subprocess.run(["java", "-Xmx128m", "-Dlsdfms.index.mode=external",
+                                     "-Dlsdfms.index.memoryMiB=4", "-cp", self.classes.name,
+                                     "com.hpc.lsdfms.core." + main, str(target)],
+                                    capture_output=True, text=True, timeout=60)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertFalse(list(target.rglob(".lsdfms-index-*")))
+
+    def test_external_publication_failure_cleans_workspace(self):
+        self.write(1, list(range(50)))
+        target = self.directory / "index_phone.idx"
+        target.mkdir()
+        (target / "keep").write_text("keep")
+        result = subprocess.run(["java", "-Xmx32m", "-Dlsdfms.index.mode=external",
+                                 "-cp", self.classes.name, "com.hpc.lsdfms.Main",
+                                 "index-parallel", str(self.directory), "2"],
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual((target / "keep").read_text(), "keep")
+        self.assertFalse(list(self.directory.glob(".lsdfms-index-*")))
+
+    def test_external_invalid_runs_and_merge_interruption(self):
+        result = self.java(self.directory, main="com.hpc.lsdfms.core.ExternalMergeTest")
+        self.assertEqual(result.returncode, 0, result.stderr)
