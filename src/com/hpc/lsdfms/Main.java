@@ -23,6 +23,8 @@ public final class Main {
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "index-parallel|pack-parallel|recover-parallel <directorio> <trabajadores:1-256>\n"
                     + "Salidas: 0 éxito, 1 error de datos/I/O, 2 argumentos inválidos.\n"
+                    + "Propiedades JVM: -Dlsdfms.index.mode=auto|memory|external\n"
+                    + "  -Dlsdfms.index.memoryMiB=128 -Dlsdfms.index.fanIn=16\n"
                     + "Bloqueo exclusivo por dataset; recover completa mantenimiento pendiente.");
             return;
         }

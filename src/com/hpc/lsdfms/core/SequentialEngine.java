@@ -69,6 +69,10 @@ public final class SequentialEngine {
         for (var source : sources) {
             count += BinaryFileHandler.inspect(source.path()).active();
         }
+        if (ExternalIndex.required(count, 1)) {
+            return ExternalIndex.build(directory, sources, count, 1,
+                    new ParallelEngine.Scanner() { }, PackMaintenance::sequential, operations::replace);
+        }
         IndexTuples tuples = IndexTuples.allocate(count, 1);
         int[] position = {0};
         for (var source : sources) {

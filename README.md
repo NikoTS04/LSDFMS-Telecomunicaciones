@@ -60,10 +60,10 @@ inválidos. Las operaciones se excluyen mediante un bloqueo cooperativo por data
 No modificar los `.dat` externamente entre indexación y consulta; reconstruir el
 índice después de cualquier cambio.
 
-La ordenación es en memoria: dos pasadas de cabeceras y arreglos primitivos
-con límite conservador de un cuarto del heap máximo para entradas. Si se excede,
-se informa error sin sustituir el índice. La ordenación externa
-pertenece al sprint 5. Una consulta materializa solo
+La ruta en memoria utiliza dos pasadas y arreglos primitivos. Cuando no cabe en
+el presupuesto, la ruta automática usa runs y merge externo (sprint 5 en curso).
+El modo forzado `memory` sigue rechazando excesos sin sustituir el índice.
+Una consulta materializa solo
 un payload a la vez (límite individual de un cuarto del heap máximo).
 Ver [contrato y límites](docs/sprint-1.md).
 
@@ -105,9 +105,9 @@ con un arreglo auxiliar. Produce el mismo `index_phone.idx` que el baseline.
 Los errores cancelan tareas y esperan su terminación antes de liberar el dataset.
 Rechaza mantenimiento pendiente y conserva el índice anterior si no puede terminar.
 
-El presupuesto de memoria incluye ambos juegos de arreglos (40 bytes por activo
-como máximo, más buffers/JVM fuera de ese presupuesto). La ordenación externa
-sigue pendiente. `pack`/`recover` conservan el baseline secuencial; los comandos
+El presupuesto de memoria de la ruta interna incluye ambos juegos de arreglos
+(40 bytes por activo); la ruta externa divide bloques y limita fan-in/trabajos.
+`pack`/`recover` conservan el baseline secuencial; los comandos
 con sufijo `-parallel` usan el motor concurrente.
 
 Comparativa reproducible en un directorio de resultados **nuevo**:
@@ -160,6 +160,19 @@ clases y configuración; archiva y repite ejecuciones sin evidencia completa.
 Los resultados y sus limitaciones están en [sprint-4.md](docs/sprint-4.md).
 
 ## Generación de datos
+
+### Ordenación externa (sprint 5, en curso)
+
+INDEX y la reindexación de PACK eligen automáticamente una ruta externa cuando el
+índice supera el presupuesto de trabajo. Configuración y pendientes en
+[docs/sprint-5.md](docs/sprint-5.md).
+
+```sh
+java -Xmx512m -Dlsdfms.index.mode=external -Dlsdfms.index.memoryMiB=128 -cp build/classes com.hpc.lsdfms.Main index-parallel data 4
+```
+
+El sprint final aún no está cerrado: las pruebas pequeñas no sustituyen la
+validación >RAM ni la campaña de escalabilidad.
 
 Dataset para el hito del 50% (**8 archivos, al menos 2 GiB en total**, aproximadamente 20% borrados):
 

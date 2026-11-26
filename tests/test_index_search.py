@@ -30,7 +30,7 @@ class IndexSearchTest(unittest.TestCase):
         self.directory = Path(self.temp.name)
 
     def java(self, *args, heap=None):
-        return subprocess.run(["java", *([f"-Xmx{heap}"] if heap else []),
+        return subprocess.run(["java", *([f"-Xmx{heap}", "-Dlsdfms.index.mode=memory"] if heap else []),
                                "-cp", self.classes.name, "com.hpc.lsdfms.Main",
                                *map(str, args)], capture_output=True, text=True)
 

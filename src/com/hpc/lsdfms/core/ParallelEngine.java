@@ -117,6 +117,16 @@ public final class ParallelEngine {
         for (long amount : counts) {
             count = Math.addExact(count, amount);
         }
+        if (ExternalIndex.required(count, 2)) {
+            return ExternalIndex.build(root, sources, count, parallelism, scanner, jobs -> {
+                try {
+                    run(executor, jobs);
+                } catch (IOException | RuntimeException | Error e) {
+                    stopAndJoin(executor);
+                    throw e;
+                }
+            }, operations::replace);
+        }
         IndexTuples tuples = IndexTuples.allocate(count, 2);
         tasks.clear();
         int start = 0;

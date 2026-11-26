@@ -1,0 +1,186 @@
+{
+  "manifest": {
+    "schema_version": 1,
+    "format": {
+      "endianness": "big",
+      "header_bytes": 21,
+      "header_struct": ">Biqq"
+    },
+    "config": {
+      "files": 16,
+      "seed": 42,
+      "total_size": 4294967296,
+      "records_per_file": null,
+      "min_payload": 64,
+      "max_payload": 64,
+      "deleted_ratio": 0.2,
+      "start_timestamp_ms": 1735689600000
+    },
+    "files": [
+      {
+        "file_id": 1,
+        "name": "F_1.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526502,
+        "deleted": 631563
+      },
+      {
+        "file_id": 2,
+        "name": "F_2.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2527851,
+        "deleted": 630214
+      },
+      {
+        "file_id": 3,
+        "name": "F_3.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526454,
+        "deleted": 631611
+      },
+      {
+        "file_id": 4,
+        "name": "F_4.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526102,
+        "deleted": 631963
+      },
+      {
+        "file_id": 5,
+        "name": "F_5.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2525592,
+        "deleted": 632473
+      },
+      {
+        "file_id": 6,
+        "name": "F_6.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2525840,
+        "deleted": 632225
+      },
+      {
+        "file_id": 7,
+        "name": "F_7.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526635,
+        "deleted": 631430
+      },
+      {
+        "file_id": 8,
+        "name": "F_8.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2525559,
+        "deleted": 632506
+      },
+      {
+        "file_id": 9,
+        "name": "F_9.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2525363,
+        "deleted": 632702
+      },
+      {
+        "file_id": 10,
+        "name": "F_10.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2527477,
+        "deleted": 630588
+      },
+      {
+        "file_id": 11,
+        "name": "F_11.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526272,
+        "deleted": 631793
+      },
+      {
+        "file_id": 12,
+        "name": "F_12.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526645,
+        "deleted": 631420
+      },
+      {
+        "file_id": 13,
+        "name": "F_13.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526465,
+        "deleted": 631600
+      },
+      {
+        "file_id": 14,
+        "name": "F_14.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2525014,
+        "deleted": 633051
+      },
+      {
+        "file_id": 15,
+        "name": "F_15.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2524668,
+        "deleted": 633397
+      },
+      {
+        "file_id": 16,
+        "name": "F_16.dat",
+        "bytes": 268435525,
+        "records": 3158065,
+        "active": 2526392,
+        "deleted": 631673
+      }
+    ],
+    "totals": {
+      "bytes": 4294968400,
+      "records": 50529040,
+      "active": 40418831,
+      "deleted": 10110209
+    }
+  },
+  "heap_bytes": 536870912,
+  "jdk": {
+    "command": [
+      "java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"27.0.1.1\" 2026-11-17\nOpenJDK Runtime Environment (build 27.0.1.1)\nOpenJDK 64-Bit Server VM (build 27.0.1.1, mixed mode, sharing)\n"
+  },
+  "sources": {
+    "src/com/hpc/lsdfms/Main.java": "294617113420ccd31c0b182ee2cb9aa4cbe26c372bd1912d450b32997cfcba34",
+    "src/com/hpc/lsdfms/core/ExternalIndex.java": "739041da80c408e4a1a61d19434edc0369ec067441378638ed8e0fe5d44f12c6",
+    "src/com/hpc/lsdfms/core/IndexTuples.java": "54467a22c890dc6689ff73aceec980dbb417f22c3e2667da662bd38785cd2371",
+    "src/com/hpc/lsdfms/core/IndexWriter.java": "b0b4320b33c65d098531c65ab233e73aa70dd48b8f3e6b24ceea08977375bc4a",
+    "src/com/hpc/lsdfms/core/PackMaintenance.java": "2746d049d5b302c15cef84231fb3dcd074ad518235455c2e6c3688394e179412",
+    "src/com/hpc/lsdfms/core/ParallelEngine.java": "15e46b08949c406ac826171546693ed58cf7bd9db265f67a6922e68e9771f7ad",
+    "src/com/hpc/lsdfms/core/SequentialEngine.java": "4f0915d3c676119e928887e5011b619d9c700fb5c595d2ce622dd772c2c9e7fd",
+    "src/com/hpc/lsdfms/core/package-info.java": "831a4f3952b62db1610df98e080aa12bfb6adfbe299531bf7193be9d1428d922",
+    "src/com/hpc/lsdfms/io/BinaryFileHandler.java": "3e9c9fbe0d4e1c1ba73b1f0b06d101960ed16086a21f5cbb3cc2fb0c0dcf607f",
+    "src/com/hpc/lsdfms/io/DatasetAccess.java": "200593dc8eb31ba832087b63cb5ef49e9a2b64c3a81593ab77a7fdc33cd902f0",
+    "src/com/hpc/lsdfms/io/DatasetFiles.java": "202888fe68611ab8c39fd55619ec59a22bc9ed7ff87218c039152246c2ec4100",
+    "src/com/hpc/lsdfms/io/FileCompactor.java": "be9dec30458832f081256a7b772a50b88829a56342ca2f1254ddfe8a10b7fc54",
+    "src/com/hpc/lsdfms/io/FileTransfers.java": "8aec0827d22c471e940cdffcc2317f116be9dcd019d446dec5f196b4647cb79e",
+    "src/com/hpc/lsdfms/model/CdrFormat.java": "9f51a78200783e6964320045822ef31bc3acacb2e73c0a2f1ee52dca34e9bb66",
+    "src/com/hpc/lsdfms/model/IndexEntry.java": "5fbcca083d51863cdf1197bcc28de38c47922ca6a63e623e8b93d6b8f3feef63",
+    "src/com/hpc/lsdfms/search/BinaryIndexSearch.java": "a01a1c98c24126691a80cf0bcf82854c2e9d79d556c81af300509462ad28a4f2",
+    "src/com/hpc/lsdfms/search/package-info.java": "d8a08981bf79f67893b8e29f30c3d0b8e68142ef52a92e8ac999a176974778df"
+  },
+  "sampling": "picos de temporales y descriptores muestreados cada 100 ms"
+}
