@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "format": {
+    "endianness": "big",
+    "header_bytes": 21,
+    "header_struct": ">Biqq"
+  },
+  "config": {
+    "files": 16,
+    "seed": 42,
+    "total_size": 67108864,
+    "records_per_file": null,
+    "min_payload": 128,
+    "max_payload": 512,
+    "deleted_ratio": 0.2,
+    "start_timestamp_ms": 1735689600000
+  },
+  "files": [
+    {
+      "file_id": 1,
+      "name": "F_1.dat",
+      "bytes": 4194379,
+      "records": 12258,
+      "active": 9790,
+      "deleted": 2468
+    },
+    {
+      "file_id": 2,
+      "name": "F_2.dat",
+      "bytes": 4194523,
+      "records": 12247,
+      "active": 9816,
+      "deleted": 2431
+    },
+    {
+      "file_id": 3,
+      "name": "F_3.dat",
+      "bytes": 4194458,
+      "records": 12294,
+      "active": 9783,
+      "deleted": 2511
+    },
+    {
+      "file_id": 4,
+      "name": "F_4.dat",
+      "bytes": 4194530,
+      "records": 12329,
+      "active": 9844,
+      "deleted": 2485
+    },
+    {
+      "file_id": 5,
+      "name": "F_5.dat",
+      "bytes": 4194384,
+      "records": 12358,
+      "active": 9872,
+      "deleted": 2486
+    },
+    {
+      "file_id": 6,
+      "name": "F_6.dat",
+      "bytes": 4194653,
+      "records": 12323,
+      "active": 9901,
+      "deleted": 2422
+    },
+    {
+      "file_id": 7,
+      "name": "F_7.dat",
+      "bytes": 4194354,
+      "records": 12321,
+      "active": 9834,
+      "deleted": 2487
+    },
+    {
+      "file_id": 8,
+      "name": "F_8.dat",
+      "bytes": 4194468,
+      "records": 12259,
+      "active": 9842,
+      "deleted": 2417
+    },
+    {
+      "file_id": 9,
+      "name": "F_9.dat",
+      "bytes": 4194456,
+      "records": 12319,
+      "active": 9798,
+      "deleted": 2521
+    },
+    {
+      "file_id": 10,
+      "name": "F_10.dat",
+      "bytes": 4194577,
+      "records": 12396,
+      "active": 9823,
+      "deleted": 2573
+    },
+    {
+      "file_id": 11,
+      "name": "F_11.dat",
+      "bytes": 4194514,
+      "records": 12273,
+      "active": 9876,
+      "deleted": 2397
+    },
+    {
+      "file_id": 12,
+      "name": "F_12.dat",
+      "bytes": 4194544,
+      "records": 12339,
+      "active": 9820,
+      "deleted": 2519
+    },
+    {
+      "file_id": 13,
+      "name": "F_13.dat",
+      "bytes": 4194430,
+      "records": 12346,
+      "active": 9892,
+      "deleted": 2454
+    },
+    {
+      "file_id": 14,
+      "name": "F_14.dat",
+      "bytes": 4194337,
+      "records": 12346,
+      "active": 9888,
+      "deleted": 2458
+    },
+    {
+      "file_id": 15,
+      "name": "F_15.dat",
+      "bytes": 4194431,
+      "records": 12227,
+      "active": 9823,
+      "deleted": 2404
+    },
+    {
+      "file_id": 16,
+      "name": "F_16.dat",
+      "bytes": 4194568,
+      "records": 12339,
+      "active": 9902,
+      "deleted": 2437
+    }
+  ],
+  "totals": {
+    "bytes": 67111606,
+    "records": 196974,
+    "active": 157504,
+    "deleted": 39470
+  }
+}

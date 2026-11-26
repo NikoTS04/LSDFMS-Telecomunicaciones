@@ -1,0 +1,692 @@
+{
+  "date_utc": "2026-11-26T05:22:46.372591+00:00",
+  "platform": "Linux-6.18.65-1-cachyos-lts-x86_64-with-glibc2.44",
+  "logical_cpus": 16,
+  "affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "config": {
+    "dataset": "data/sprint5-scaling/64MiB",
+    "output": "docs/benchmarks/sprint5-index-64MiB",
+    "classes": "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+    "workers": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "heap": "512m",
+    "warmups": 1,
+    "repetitions": 5,
+    "samples": 1000,
+    "seed": 42,
+    "allow_small": true
+  },
+  "dataset_bytes": 67111606,
+  "manifest": {
+    "schema_version": 1,
+    "format": {
+      "endianness": "big",
+      "header_bytes": 21,
+      "header_struct": ">Biqq"
+    },
+    "config": {
+      "files": 16,
+      "seed": 42,
+      "total_size": 67108864,
+      "records_per_file": null,
+      "min_payload": 128,
+      "max_payload": 512,
+      "deleted_ratio": 0.2,
+      "start_timestamp_ms": 1735689600000
+    },
+    "files": [
+      {
+        "file_id": 1,
+        "name": "F_1.dat",
+        "bytes": 4194379,
+        "records": 12258,
+        "active": 9790,
+        "deleted": 2468
+      },
+      {
+        "file_id": 2,
+        "name": "F_2.dat",
+        "bytes": 4194523,
+        "records": 12247,
+        "active": 9816,
+        "deleted": 2431
+      },
+      {
+        "file_id": 3,
+        "name": "F_3.dat",
+        "bytes": 4194458,
+        "records": 12294,
+        "active": 9783,
+        "deleted": 2511
+      },
+      {
+        "file_id": 4,
+        "name": "F_4.dat",
+        "bytes": 4194530,
+        "records": 12329,
+        "active": 9844,
+        "deleted": 2485
+      },
+      {
+        "file_id": 5,
+        "name": "F_5.dat",
+        "bytes": 4194384,
+        "records": 12358,
+        "active": 9872,
+        "deleted": 2486
+      },
+      {
+        "file_id": 6,
+        "name": "F_6.dat",
+        "bytes": 4194653,
+        "records": 12323,
+        "active": 9901,
+        "deleted": 2422
+      },
+      {
+        "file_id": 7,
+        "name": "F_7.dat",
+        "bytes": 4194354,
+        "records": 12321,
+        "active": 9834,
+        "deleted": 2487
+      },
+      {
+        "file_id": 8,
+        "name": "F_8.dat",
+        "bytes": 4194468,
+        "records": 12259,
+        "active": 9842,
+        "deleted": 2417
+      },
+      {
+        "file_id": 9,
+        "name": "F_9.dat",
+        "bytes": 4194456,
+        "records": 12319,
+        "active": 9798,
+        "deleted": 2521
+      },
+      {
+        "file_id": 10,
+        "name": "F_10.dat",
+        "bytes": 4194577,
+        "records": 12396,
+        "active": 9823,
+        "deleted": 2573
+      },
+      {
+        "file_id": 11,
+        "name": "F_11.dat",
+        "bytes": 4194514,
+        "records": 12273,
+        "active": 9876,
+        "deleted": 2397
+      },
+      {
+        "file_id": 12,
+        "name": "F_12.dat",
+        "bytes": 4194544,
+        "records": 12339,
+        "active": 9820,
+        "deleted": 2519
+      },
+      {
+        "file_id": 13,
+        "name": "F_13.dat",
+        "bytes": 4194430,
+        "records": 12346,
+        "active": 9892,
+        "deleted": 2454
+      },
+      {
+        "file_id": 14,
+        "name": "F_14.dat",
+        "bytes": 4194337,
+        "records": 12346,
+        "active": 9888,
+        "deleted": 2458
+      },
+      {
+        "file_id": 15,
+        "name": "F_15.dat",
+        "bytes": 4194431,
+        "records": 12227,
+        "active": 9823,
+        "deleted": 2404
+      },
+      {
+        "file_id": 16,
+        "name": "F_16.dat",
+        "bytes": 4194568,
+        "records": 12339,
+        "active": 9902,
+        "deleted": 2437
+      }
+    ],
+    "totals": {
+      "bytes": 67111606,
+      "records": 196974,
+      "active": 157504,
+      "deleted": 39470
+    }
+  },
+  "timing": "Wall subprocess: inicio JVM, bloqueo, conteo, extracci\u00f3n, sort, escritura, force, cierre",
+  "cache": "No controlada; calentamiento previo por configuraci\u00f3n; sin vaciar cach\u00e9 SO",
+  "resource_measurement": "wait4 por PID",
+  "commands": {
+    "sequential-1-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB"
+    ],
+    "parallel-1-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "1"
+    ],
+    "parallel-2-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "2"
+    ],
+    "parallel-4-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "4"
+    ],
+    "parallel-8-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "8"
+    ],
+    "parallel-16-warmup-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "16"
+    ],
+    "sequential-1-measured-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB"
+    ],
+    "parallel-1-measured-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "1"
+    ],
+    "parallel-2-measured-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "2"
+    ],
+    "parallel-4-measured-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "4"
+    ],
+    "parallel-8-measured-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "8"
+    ],
+    "parallel-16-measured-1": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "16"
+    ],
+    "sequential-1-measured-2": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB"
+    ],
+    "parallel-1-measured-2": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "1"
+    ],
+    "parallel-2-measured-2": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "2"
+    ],
+    "parallel-4-measured-2": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "4"
+    ],
+    "parallel-8-measured-2": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "8"
+    ],
+    "parallel-16-measured-2": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "16"
+    ],
+    "sequential-1-measured-3": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB"
+    ],
+    "parallel-1-measured-3": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "1"
+    ],
+    "parallel-2-measured-3": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "2"
+    ],
+    "parallel-4-measured-3": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "4"
+    ],
+    "parallel-8-measured-3": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "8"
+    ],
+    "parallel-16-measured-3": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "16"
+    ],
+    "sequential-1-measured-4": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB"
+    ],
+    "parallel-1-measured-4": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "1"
+    ],
+    "parallel-2-measured-4": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "2"
+    ],
+    "parallel-4-measured-4": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "4"
+    ],
+    "parallel-8-measured-4": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "8"
+    ],
+    "parallel-16-measured-4": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "16"
+    ],
+    "sequential-1-measured-5": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB"
+    ],
+    "parallel-1-measured-5": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "1"
+    ],
+    "parallel-2-measured-5": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "2"
+    ],
+    "parallel-4-measured-5": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "4"
+    ],
+    "parallel-8-measured-5": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "8"
+    ],
+    "parallel-16-measured-5": [
+      "/usr/bin/java",
+      "-Xmx512m",
+      "-cp",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/build/classes",
+      "com.hpc.lsdfms.Main",
+      "index-parallel",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB",
+      "16"
+    ]
+  },
+  "jdk": {
+    "command": [
+      "java",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "openjdk version \"27.0.1.1\" 2026-11-17\nOpenJDK Runtime Environment (build 27.0.1.1)\nOpenJDK 64-Bit Server VM (build 27.0.1.1, mixed mode, sharing)\n"
+  },
+  "cpu": {
+    "command": [
+      "lscpu"
+    ],
+    "returncode": 0,
+    "stdout": "Architecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  16\nOn-line CPU(s) list:                     0-15\nVendor ID:                               AuthenticAMD\nModel name:                              AMD Ryzen 7 7735HS with Radeon Graphics\nCPU family:                              25\nModel:                                   68\nThread(s) per core:                      2\nCore(s) per socket:                      8\nSocket(s):                               1\nStepping:                                1\nMicrocode version:                       0xa404108\nFrequency boost:                         enabled\nCPU(s) scaling MHz:                      36%\nCPU max MHz:                             3201.0000\nCPU min MHz:                             407.4000\nBogoMIPS:                                6387.93\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap\nVirtualization:                          AMD-V\nL1d cache:                               256 KiB (8 instances)\nL1i cache:                               256 KiB (8 instances)\nL2 cache:                                4 MiB (8 instances)\nL3 cache:                                16 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-15\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Mitigation; Safe RET\nVulnerability Spec store bypass:         Mitigation; Speculative Store Bypass disabled via prctl\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; IBPB conditional; IBRS_FW; STIBP always-on; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Mitigation; Clear CPU buffers\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Mitigation; IBPB before exit to userspace\n",
+    "stderr": ""
+  },
+  "memory": {
+    "command": [
+      "free",
+      "-b"
+    ],
+    "returncode": 0,
+    "stdout": "               total        used        free      shared  buff/cache   available\nMem:     14311333888  5748842496  1124548608    81285120  7872770048  8562491392\nSwap:    14310961152  1694547968 12616413184\n",
+    "stderr": ""
+  },
+  "filesystem": {
+    "command": [
+      "df",
+      "-T",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones/data/sprint5-scaling/64MiB"
+    ],
+    "returncode": 0,
+    "stdout": "Filesystem     Type  1K-blocks      Used Available Use% Mounted on\n/dev/nvme0n1p2 btrfs 498008372 452639520  40957600  92% /home\n",
+    "stderr": ""
+  },
+  "block_devices": {
+    "command": [
+      "lsblk",
+      "-d",
+      "-o",
+      "NAME,MODEL,ROTA"
+    ],
+    "returncode": 0,
+    "stdout": "NAME    MODEL                           ROTA\nzram0                                      0\nnvme0n1 WD PC SN5000S SDEPMSJ-512G-1101    0\n",
+    "stderr": ""
+  },
+  "jvm_system": {
+    "command": [
+      "java",
+      "-XshowSettings:system",
+      "-version"
+    ],
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "Operating System Metrics:\n    Provider: cgroupv2\n    System not containerized.\nopenjdk version \"27.0.1.1\" 2026-11-17\nOpenJDK Runtime Environment (build 27.0.1.1)\nOpenJDK 64-Bit Server VM (build 27.0.1.1, mixed mode, sharing)\n"
+  },
+  "git": {
+    "command": [
+      "git",
+      "-C",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones",
+      "rev-parse",
+      "HEAD"
+    ],
+    "returncode": 0,
+    "stdout": "59b142f4240618d74097830015baee81baf83998\n",
+    "stderr": ""
+  },
+  "git_status": {
+    "command": [
+      "git",
+      "-C",
+      "/home/nicolas/Github-repos/Repos/LSDFMS-Telecomunicaciones",
+      "status",
+      "--short"
+    ],
+    "returncode": 0,
+    "stdout": "?? docs/benchmarks/sprint5-large-index/\n",
+    "stderr": ""
+  },
+  "java_source_sha256": {
+    "src/com/hpc/lsdfms/Main.java": "294617113420ccd31c0b182ee2cb9aa4cbe26c372bd1912d450b32997cfcba34",
+    "src/com/hpc/lsdfms/core/ExternalIndex.java": "739041da80c408e4a1a61d19434edc0369ec067441378638ed8e0fe5d44f12c6",
+    "src/com/hpc/lsdfms/core/IndexTuples.java": "54467a22c890dc6689ff73aceec980dbb417f22c3e2667da662bd38785cd2371",
+    "src/com/hpc/lsdfms/core/IndexWriter.java": "b0b4320b33c65d098531c65ab233e73aa70dd48b8f3e6b24ceea08977375bc4a",
+    "src/com/hpc/lsdfms/core/PackMaintenance.java": "2746d049d5b302c15cef84231fb3dcd074ad518235455c2e6c3688394e179412",
+    "src/com/hpc/lsdfms/core/ParallelEngine.java": "15e46b08949c406ac826171546693ed58cf7bd9db265f67a6922e68e9771f7ad",
+    "src/com/hpc/lsdfms/core/SequentialEngine.java": "4f0915d3c676119e928887e5011b619d9c700fb5c595d2ce622dd772c2c9e7fd",
+    "src/com/hpc/lsdfms/core/package-info.java": "831a4f3952b62db1610df98e080aa12bfb6adfbe299531bf7193be9d1428d922",
+    "src/com/hpc/lsdfms/io/BinaryFileHandler.java": "3e9c9fbe0d4e1c1ba73b1f0b06d101960ed16086a21f5cbb3cc2fb0c0dcf607f",
+    "src/com/hpc/lsdfms/io/DatasetAccess.java": "200593dc8eb31ba832087b63cb5ef49e9a2b64c3a81593ab77a7fdc33cd902f0",
+    "src/com/hpc/lsdfms/io/DatasetFiles.java": "202888fe68611ab8c39fd55619ec59a22bc9ed7ff87218c039152246c2ec4100",
+    "src/com/hpc/lsdfms/io/FileCompactor.java": "be9dec30458832f081256a7b772a50b88829a56342ca2f1254ddfe8a10b7fc54",
+    "src/com/hpc/lsdfms/io/FileTransfers.java": "8aec0827d22c471e940cdffcc2317f116be9dcd019d446dec5f196b4647cb79e",
+    "src/com/hpc/lsdfms/model/CdrFormat.java": "9f51a78200783e6964320045822ef31bc3acacb2e73c0a2f1ee52dca34e9bb66",
+    "src/com/hpc/lsdfms/model/IndexEntry.java": "5fbcca083d51863cdf1197bcc28de38c47922ca6a63e623e8b93d6b8f3feef63",
+    "src/com/hpc/lsdfms/search/BinaryIndexSearch.java": "a01a1c98c24126691a80cf0bcf82854c2e9d79d556c81af300509462ad28a4f2",
+    "src/com/hpc/lsdfms/search/package-info.java": "d8a08981bf79f67893b8e29f30c3d0b8e68142ef52a92e8ac999a176974778df"
+  },
+  "class_sha256": {
+    "com/hpc/lsdfms/Main.class": "88b3925896baf5a2f955b529db344778bd0aea404c3b0edff666d72d85d87ff8",
+    "com/hpc/lsdfms/core/ExternalIndex$Cursor.class": "9a01b1ca0b95c43e35338518841339e7e8054aab7a3a47be4ab8eff6cea82b06",
+    "com/hpc/lsdfms/core/ExternalIndex.class": "ad09a720a3127189c6bbad32ca7e20cf77ee26f9e2ff563d0cb44f4827512c3b",
+    "com/hpc/lsdfms/core/IndexTuples.class": "56080fe2fe9f2fd78e98d4ca10a314732b4f731eaeeec55a93300757aea86fce",
+    "com/hpc/lsdfms/core/IndexWriter$Replacement.class": "2629cba544132acdc9a3250b94b8e9adc0f90539c5cdb6c3babdcdc4babfbb06",
+    "com/hpc/lsdfms/core/IndexWriter.class": "dac17428037797f6519a49ea572c4d11febb555d3b45f12634456fcfd48ce2c0",
+    "com/hpc/lsdfms/core/PackMaintenance$Indexer.class": "705ab287c4c8404ddcd3a9f5dae2d8662d8f90c8d14cdb9040e8aec2520de408",
+    "com/hpc/lsdfms/core/PackMaintenance$Runner.class": "b9e1b03711f76f07d6d9a46bba43af8ff9b584ca7e1411f1b153518cb0f1a529",
+    "com/hpc/lsdfms/core/PackMaintenance.class": "d2476b24063ad2c7f53c1508c67cbafa529c2967816148240609339018ddb31c",
+    "com/hpc/lsdfms/core/ParallelEngine$1.class": "ba3c73efcaee7b35b5a0df36d8972f52214720fa5804d5b8880df3e4c915899c",
+    "com/hpc/lsdfms/core/ParallelEngine$2.class": "74921c110d03344a9e4035c5c49ea21f3158025a722494ec2a09c1cf8d5b1009",
+    "com/hpc/lsdfms/core/ParallelEngine$3.class": "8ca68730191362967d6a9591809fa229ef6a9d25a98354fefbc69c07006c8dd9",
+    "com/hpc/lsdfms/core/ParallelEngine$Scanner.class": "d497089acc73a39506ee1405315c10e9dc92201bf040ce4fb393a01f1de4b6f2",
+    "com/hpc/lsdfms/core/ParallelEngine.class": "deff48052cded1bc5cf762b4871c668e03f04e70ae17ec76bbbf6a3b017a000a",
+    "com/hpc/lsdfms/core/SequentialEngine$1.class": "3d599338d64566530d0eb1ccfb38cf3e3c9a96335683ec41d931b42bd5a38299",
+    "com/hpc/lsdfms/core/SequentialEngine$2.class": "19b6e365e8d3a0064a6e5c7de769e36d4795a68f25c97669df8cdd5fcfd08b46",
+    "com/hpc/lsdfms/core/SequentialEngine$Operations.class": "4907a8944f20df596228de9e934095c8fef48be01b9be3eb143a5131223aa85d",
+    "com/hpc/lsdfms/core/SequentialEngine$PackStats.class": "401647dbd941664ef91f4e4fda0394a1f55cc4c0e6f3dd5c9f09d18f8a745857",
+    "com/hpc/lsdfms/core/SequentialEngine$Tuples.class": "652faea540ef7a7f2e892e6a96edd8594829baa11a51a5bbb2e2ee73b7402d22",
+    "com/hpc/lsdfms/core/SequentialEngine.class": "8c31221009cd87e269d955f5d004a10fd611737b356644cbb9af1ea0eb836f2e",
+    "com/hpc/lsdfms/io/BinaryFileHandler$ActiveRecordConsumer.class": "7e762e808f3f63a7088daca05fe5d5bd65aaf81da7be16119021bf886d3eb5c2",
+    "com/hpc/lsdfms/io/BinaryFileHandler$CdrRecord.class": "3771b017e190e3f1b749738aa7dae1ef80e2178fc58a6b9d8628204da452d729",
+    "com/hpc/lsdfms/io/BinaryFileHandler$FileStats.class": "5106de3e2dc02c98024b88d6dbee9a0a586fdf9e5e0985989f6e0ab37daa8b62",
+    "com/hpc/lsdfms/io/BinaryFileHandler$RecordConsumer.class": "b6b947fa9cc76a440f0fed1f9829dc1a3ee5bf113a9e59e9db87bce9b96301d4",
+    "com/hpc/lsdfms/io/BinaryFileHandler.class": "dcb7b1c209de01497553213775b4e7604e37e335797094201e9f634aed009699",
+    "com/hpc/lsdfms/io/DatasetAccess.class": "75e4a651542f921353abe3886a2bdd24251bf3971b61d292cf6305becdd3b7fb",
+    "com/hpc/lsdfms/io/DatasetFiles$Source.class": "c66433dc18956e17dbe1eca238fc80702ec08d2f3d7bac8d073ed12216095c68",
+    "com/hpc/lsdfms/io/DatasetFiles.class": "2aaeec29e741825acfaba3d8bc8329c4d7c4d5dcf68a17b33bdc29eb8499879c",
+    "com/hpc/lsdfms/io/FileCompactor.class": "208b104063f7deee0524c594d2686ec8dfa15fb4b843bde211820cb92a9ce4f9",
+    "com/hpc/lsdfms/io/FileTransfers$Transfer.class": "22df74f49aed040ece0600a463224f1b583940240585ca2668f43f0eb8facdf5",
+    "com/hpc/lsdfms/io/FileTransfers.class": "66d2955cb04b8830c36d0735a5ac8b1bfdf1f3bab93ed8caf595153806c0fb89",
+    "com/hpc/lsdfms/model/CdrFormat.class": "bbb1115113c5d10a75854956ad72f23a84525d7afc85f9ec07a96b66db660015",
+    "com/hpc/lsdfms/model/IndexEntry.class": "8089e4aa725731ef199744caec9d35842cbc945cd4768e69066b9b5d077a717c",
+    "com/hpc/lsdfms/search/BinaryIndexSearch$RecordConsumer.class": "8b5c9f630fa084437e1e327c841287dc87200c4327f5d65ca5f0f4cf759f92ea",
+    "com/hpc/lsdfms/search/BinaryIndexSearch.class": "82100ffe73ce61fcbe7092ec06f8be39c173925cc75167207a97400f616ceee6"
+  }
+}
