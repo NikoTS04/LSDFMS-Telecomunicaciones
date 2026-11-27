@@ -87,7 +87,8 @@ public final class ParallelEngine {
             try {
                 return PackMaintenance.execute(access, recovery, sources, operations,
                         tasks -> run(executor, tasks),
-                        (root, files) -> indexLocked(root, files, executor, parallelism));
+                        (root, files) -> new ColumnIndexBuilder(scanner, operations)
+                                .buildLocked(root, files));
             } finally {
                 stopAndJoin(executor);
             }

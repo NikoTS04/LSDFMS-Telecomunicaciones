@@ -29,6 +29,16 @@ public final class BinaryFileHandler {
                 throws IOException;
     }
 
+    /** Como {@link RecordConsumer} pero con el timestamp de la cabecera (columnas indexables). */
+    @FunctionalInterface
+    public interface HeaderConsumer {
+        void accept(boolean deleted, int payloadLength, long phoneNumber, long timestamp,
+                long byteOffset) throws IOException;
+    }
+
+    /** Cabecera de un registro, sin payload. */
+    public record Header(boolean deleted, int payloadLength, long phoneNumber, long timestamp) { }
+
     /** Resultado individual de consulta; no se materializa durante INDEX. */
     public record CdrRecord(long phoneNumber, long timestamp, byte[] payload) { }
 
@@ -48,6 +58,12 @@ public final class BinaryFileHandler {
 
     /** Emite metadatos sin asignar objetos por registro ni cargar payloads. */
     public static FileStats scanRecords(Path path, RecordConsumer consumer) throws IOException {
+        return scanHeaders(path, (deleted, length, phone, timestamp, offset) ->
+                consumer.accept(deleted, length, phone, offset));
+    }
+
+    /** Igual que {@link #scanRecords} pero expone también el timestamp de cada cabecera. */
+    public static FileStats scanHeaders(Path path, HeaderConsumer consumer) throws IOException {
         ByteBuffer header = ByteBuffer.allocateDirect(CdrFormat.HEADER_BYTES)
                 .order(CdrFormat.BYTE_ORDER);
         try (FileChannel channel = FileChannel.open(path, StandardOpenOption.READ,
@@ -71,7 +87,8 @@ public final class BinaryFileHandler {
                 if (length < 0 || length > size - offset - CdrFormat.HEADER_BYTES) {
                     throw invalid(path, offset, "longitud de payload inválida o payload truncado");
                 }
-                consumer.accept(flag != 0, length, header.getLong(), offset);
+                long phone = header.getLong();
+                consumer.accept(flag != 0, length, phone, header.getLong(), offset);
                 records++;
                 deleted += flag;
                 offset += CdrFormat.HEADER_BYTES + (long) length;
@@ -110,6 +127,32 @@ public final class BinaryFileHandler {
             readFully(channel, ByteBuffer.wrap(payload), offset + CdrFormat.HEADER_BYTES);
             return new CdrRecord(phone, timestamp, payload);
         }
+    }
+
+    /**
+     * Lee la cabecera de un registro (activo o borrado) validando límites y longitud.
+     * El llamador mantiene el canal abierto para reutilizarlo entre consultas.
+     */
+    public static Header readHeader(FileChannel channel, Path path, long offset)
+            throws IOException {
+        long size = channel.size();
+        if (offset < 0 || offset > size || size - offset < CdrFormat.HEADER_BYTES) {
+            throw invalid(path, offset, "offset fuera de límites o cabecera truncada");
+        }
+        ByteBuffer header = ByteBuffer.allocate(CdrFormat.HEADER_BYTES).order(CdrFormat.BYTE_ORDER);
+        readFully(channel, header, offset);
+        header.flip();
+        byte flag = header.get();
+        int length = header.getInt();
+        long phone = header.getLong();
+        long timestamp = header.getLong();
+        if (flag != 0 && flag != 1) {
+            throw invalid(path, offset, "isDeleted debe ser 0 o 1");
+        }
+        if (length < 0 || length > size - offset - CdrFormat.HEADER_BYTES) {
+            throw invalid(path, offset, "longitud de payload inválida o payload truncado");
+        }
+        return new Header(flag != 0, length, phone, timestamp);
     }
 
     /** Lectura posicional completa; evita bucles infinitos si no hay progreso. */
