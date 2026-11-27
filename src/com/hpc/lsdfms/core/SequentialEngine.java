@@ -57,11 +57,23 @@ public final class SequentialEngine {
 
     private PackStats maintain(Path directory, boolean recovery) throws IOException {
         try (DatasetAccess access = DatasetAccess.acquire(directory)) {
-            return PackMaintenance.execute(access, recovery, DatasetFiles.list(access.directory()),
-                    operations, PackMaintenance::sequential, (root, sources) ->
-                            new ColumnIndexBuilder(new ParallelEngine.Scanner() { }, operations)
-                                    .buildLocked(root, sources));
+            return maintainLocked(access, recovery);
         }
+    }
+
+    /**
+     * PACK (o recover) con el acceso ya en poder del llamador, por ejemplo un servicio en proceso.
+     * Reconstruye también los tres índices de columna antes de cerrar el marcador.
+     */
+    public PackStats packLocked(DatasetAccess access, boolean recovery) throws IOException {
+        return maintainLocked(access, recovery);
+    }
+
+    private PackStats maintainLocked(DatasetAccess access, boolean recovery) throws IOException {
+        return PackMaintenance.execute(access, recovery, DatasetFiles.list(access.directory()),
+                operations, PackMaintenance::sequential, (root, sources) ->
+                        new ColumnIndexBuilder(new ParallelEngine.Scanner() { }, operations)
+                                .buildLocked(root, sources));
     }
 
     /** Llamador posee el bloqueo; también se usa mientras el marcador sigue activo. */
