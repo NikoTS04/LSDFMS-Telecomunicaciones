@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" role="img" aria-label="Viabilidad: índice mayor que el heap">
+<rect width="1000" height="600" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033} .small{font-size:16px}</style>
+<text x="45" y="45" font-size="28">Viabilidad: índice mayor que el heap</text>
+<text x="45" y="78" class="small">Dataset de 4 GiB · ambos motores completaron INDEX y produjeron el mismo hash</text>
+<text x="45" y="160">Índice final</text><rect x="340" y="132" width="488.25" height="45" fill="#2563eb"/><text x="838.25" y="160">770.9 MiB</text>
+<text x="45" y="245">Heap máximo configurado</text><rect x="340" y="217" width="324.27" height="45" fill="#d97706"/><text x="674.27" y="245">512.0 MiB</text>
+<text x="45" y="330">RSS secuencial observado</text><rect x="340" y="302" width="354.31" height="45" fill="#475569"/><text x="704.31" y="330">559.4 MiB</text>
+<text x="45" y="415">RSS paralelo observado</text><rect x="340" y="387" width="214.37" height="45" fill="#15803d"/><text x="564.37" y="415">338.5 MiB</text>
+<text x="45" y="550" class="small">Tamaño de archivo, límite heap y RSS son magnitudes distintas. Una ejecución por motor.</text>
+<text x="45" y="580" font-size="13">Fuente: docs/benchmarks/ · scripts/presentation_charts.py</text>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" role="img" aria-label="INDEX: mejora respecto al baseline secuencial">
+<rect width="1000" height="600" fill="#fff"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033} .small{font-size:16px}</style>
+<text x="45" y="45" font-size="28">INDEX: mejora respecto al baseline secuencial</text>
+<text x="45" y="78" class="small">Medianas de 5 medidas; 1 calentamiento; heap 512 MiB; caché SO no controlada</text>
+<path d="M90 470 H900" stroke="#ddd"/><text x="55" y="475">0×</text>
+<path d="M90 405 H900" stroke="#ddd"/><text x="55" y="410">1×</text>
+<path d="M90 340 H900" stroke="#ddd"/><text x="55" y="345">2×</text>
+<path d="M90 275 H900" stroke="#ddd"/><text x="55" y="280">3×</text>
+<path d="M90 210 H900" stroke="#ddd"/><text x="55" y="215">4×</text>
+<path d="M90 145 H900" stroke="#ddd"/><text x="55" y="150">5×</text>
+<text x="105" y="500">1</text>
+<text x="290" y="500">2</text>
+<text x="475" y="500">4</text>
+<text x="660" y="500">8</text>
+<text x="845" y="500">16</text>
+<text x="350" y="525">Trabajadores (categorías)</text>
+<polyline points="110,406.42 295,390.64 480,386.42 665,389.28 850,389.55" fill="none" stroke="#2563eb" stroke-width="3"/>
+<circle cx="110" cy="406.42" r="5" fill="#2563eb"/>
+<circle cx="295" cy="390.64" r="5" fill="#2563eb"/>
+<circle cx="480" cy="386.42" r="5" fill="#2563eb"/>
+<circle cx="665" cy="389.28" r="5" fill="#2563eb"/>
+<circle cx="850" cy="389.55" r="5" fill="#2563eb"/>
+<text x="110" y="115" fill="#2563eb" style="fill:#2563eb">64MiB · serie paralela</text>
+<polyline points="110,406.06 295,364.82 480,313.77 665,295.52 850,222.69" fill="none" stroke="#d97706" stroke-width="3"/>
+<circle cx="110" cy="406.06" r="5" fill="#d97706"/>
+<circle cx="295" cy="364.82" r="5" fill="#d97706"/>
+<circle cx="480" cy="313.77" r="5" fill="#d97706"/>
+<circle cx="665" cy="295.52" r="5" fill="#d97706"/>
+<circle cx="850" cy="222.69" r="5" fill="#d97706"/>
+<text x="380" y="115" fill="#d97706" style="fill:#d97706">512MiB · serie paralela</text>
+<polyline points="110,398.00 295,335.58 480,250.71 665,196.37 850,208.05" fill="none" stroke="#15803d" stroke-width="3"/>
+<circle cx="110" cy="398.00" r="5" fill="#15803d"/>
+<circle cx="295" cy="335.58" r="5" fill="#15803d"/>
+<circle cx="480" cy="250.71" r="5" fill="#15803d"/>
+<circle cx="665" cy="196.37" r="5" fill="#15803d"/>
+<circle cx="850" cy="208.05" r="5" fill="#15803d"/>
+<text x="650" y="115" fill="#15803d" style="fill:#15803d">2GiB · serie paralela</text>
+<text x="45" y="550" class="small">Más trabajadores no siempre ayudan. S = mediana(Tseq) / mediana(Tpar).</text>
+<text x="45" y="580" font-size="13">Fuente: docs/benchmarks/ · scripts/presentation_charts.py</text>
+</svg>
