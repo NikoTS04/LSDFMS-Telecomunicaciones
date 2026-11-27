@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fa">
+  <title>LSDFMS | Consola CDR</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Ir al contenido</a>
+  <header class="masthead">
+    <div class="frame masthead-inner">
+      <a class="brand" href="#main">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        LSDFMS <span class="brand-divider"></span> <span class="brand-module">Consola CDR</span>
+      </a>
+      <nav aria-label="Navegación principal">
+        <a href="#estado">Estado</a>
+        <a href="#registros">Registros</a>
+        <a href="#actividad">Actividad</a>
+      </nav>
+      <span id="connection" class="badge dot" role="status">Conectando</span>
+    </div>
+  </header>
+
+  <main class="frame" id="main">
+    <div class="page-intro">
+      <h1>Motor de registros CDR</h1>
+      <p>Consulte registros de telecomunicaciones y supervise la cola, los índices y el mantenimiento.</p>
+    </div>
+
+    <div id="offline" class="notice warning" hidden>
+      <p id="offline-message" role="status"></p>
+      <button type="button" id="enable-mock">Usar datos de demostración</button>
+    </div>
+    <p id="recover" class="notice warning" role="alert" hidden>El motor requiere recuperación. Se suspenden los cambios y el mantenimiento hasta que el servidor se recupere.</p>
+
+    <section class="panel" id="estado" aria-labelledby="status-title">
+      <header class="section-head">
+        <h2 id="status-title">Estado del motor</h2>
+        <span id="index-badge" class="badge dot" role="status">Índice por consultar</span>
+      </header>
+      <dl class="metrics">
+        <div><dt>Registros activos</dt><dd id="active-count">—</dd></div>
+        <div><dt>Registros eliminados</dt><dd id="deleted-count">—</dd></div>
+        <div><dt>Registros totales</dt><dd id="total-count">—</dd></div>
+        <div><dt>Archivos</dt><dd id="file-count">—</dd></div>
+        <div><dt>Solicitudes en cola</dt><dd id="queue-depth">—</dd></div>
+      </dl>
+      <div class="status-detail">
+        <div class="versions">
+          <dl>
+            <div><dt>Versión de datos</dt><dd id="data-version">—</dd></div>
+            <div><dt>Versión del índice</dt><dd id="index-version">—</dd></div>
+          </dl>
+          <p id="index-detail" class="muted">Consultando las versiones del motor.</p>
+        </div>
+        <div class="maintenance">
+          <div class="maintenance-title">
+            <h3>Mantenimiento</h3>
+            <span id="maintenance-state" class="badge dot" role="status">Por consultar</span>
+          </div>
+          <p id="maintenance-summary" class="muted">Consultando el último ciclo.</p>
+          <button type="button" id="maintenance-button" disabled>Ejecutar mantenimiento (PACK + reindexación)</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="registros" aria-labelledby="records-title">
+      <h2 id="records-title" class="section-title">Registros CDR</h2>
+      <div class="work-grid">
+        <section class="panel work-panel" aria-labelledby="search-title">
+          <h3 id="search-title">Buscar registros</h3>
+          <form id="search-form">
+            <div class="fields search-fields">
+              <label>Columna
+                <select id="search-column">
+                  <option value="phone">Teléfono</option>
+                  <option value="timestamp">Fecha/hora</option>
+                  <option value="size">Tamaño (bytes)</option>
+                </select>
+              </label>
+              <label>Coincidencia
+                <select id="search-mode">
+                  <option value="exact">Exacta</option>
+                  <option value="range">Por rango</option>
+                </select>
+              </label>
+              <label><span id="search-lower-label">Valor</span>
+                <input id="search-lower" type="text" inputmode="numeric" placeholder="51912345678" required>
+              </label>
+              <label id="search-upper-field" hidden>Hasta
+                <input id="search-upper" type="text" inputmode="numeric">
+              </label>
+              <label>Límite de resultados
+                <input id="search-limit" type="number" min="1" max="500" step="1" value="100" required>
+              </label>
+            </div>
+            <div class="form-actions"><button class="primary" id="search-button" disabled>Buscar</button></div>
+          </form>
+        </section>
+
+        <section class="panel work-panel" aria-labelledby="record-title">
+          <h3 id="record-title">Insertar registro</h3>
+          <p id="edit-detail" class="muted" hidden></p>
+          <form id="record-form">
+            <div class="fields record-fields">
+              <label>Teléfono
+                <input id="record-phone" type="text" inputmode="numeric" pattern="[0-9]+" placeholder="51912345678" required>
+              </label>
+              <label>Fecha/hora local
+                <input id="record-timestamp" type="datetime-local" step="1" required>
+              </label>
+              <label>Servicio
+                <select id="record-service">
+                  <option value="VOZ">VOZ</option><option value="SMS">SMS</option><option value="DATA">DATA</option>
+                </select>
+              </label>
+              <label>Celda
+                <input id="record-cell" type="number" min="10000" max="99999" step="1" placeholder="10000–99999" required>
+              </label>
+              <label>Duración (s)
+                <input id="record-duration" type="number" min="0" max="3600" step="1" value="60" required>
+              </label>
+              <label>Roaming
+                <select id="record-roaming">
+                  <option value="PE">PE</option><option value="CL">CL</option><option value="CO">CO</option>
+                  <option value="EC">EC</option><option value="US">US</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button class="primary" id="save-record" disabled>Insertar registro</button>
+              <button type="button" id="cancel-edit" hidden>Cancelar edición</button>
+            </div>
+          </form>
+        </section>
+      </div>
+
+      <section class="panel results" aria-labelledby="results-title">
+        <header class="section-head">
+          <h3 id="results-title">Resultados</h3>
+          <p class="muted" id="result-summary" role="status">Realice una búsqueda para ver los registros.</p>
+        </header>
+        <div class="table-wrap" role="region" aria-labelledby="results-title" tabindex="0">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Teléfono</th><th scope="col">Fecha/hora local</th><th scope="col">Bytes</th>
+                <th scope="col">Servicio</th><th scope="col">Celda</th><th scope="col">Duración</th>
+                <th scope="col">Roaming</th><th scope="col">Ubicación</th><th scope="col">Origen</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="result-rows"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel activity" id="actividad" aria-labelledby="activity-title">
+      <header class="section-head">
+        <h2 id="activity-title">Actividad reciente</h2>
+        <span class="muted">Esta sesión</span>
+      </header>
+      <p id="activity-empty" class="muted">Las búsquedas, los cambios y el mantenimiento aparecerán aquí.</p>
+      <ol id="activity-log"></ol>
+    </section>
+  </main>
+
+  <div id="feedback" class="feedback" role="status" aria-live="polite" hidden>
+    <span id="feedback-text"></span>
+    <button id="dismiss-feedback" type="button">Cerrar</button>
+  </div>
+
+  <dialog id="delete-dialog" aria-labelledby="delete-title" aria-describedby="delete-detail">
+    <form method="dialog">
+      <h2 id="delete-title">¿Eliminar este registro?</h2>
+      <p id="delete-detail"></p>
+      <p class="muted">El mantenimiento retirará el registro eliminado del archivo.</p>
+      <div class="form-actions">
+        <button value="cancel" autofocus>Cancelar</button>
+        <button class="danger" value="delete" id="confirm-delete">Eliminar registro</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
