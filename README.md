@@ -176,6 +176,32 @@ Si el benchmark se interrumpe, `--resume` continúa únicamente si coinciden fue
 clases y configuración; archiva y repite ejecuciones sin evidencia completa.
 Los resultados y sus limitaciones están en [sprint-4.md](docs/sprint-4.md).
 
+## Servidor web de demostración
+
+Aplicación web sencilla sobre el motor: las mutaciones (alta, edición y baja) se encolan en una
+cola sincronizada escrita a mano y las aplica un único hilo; un proceso en segundo plano ejecuta
+PACK y reindexa tras los cambios. El servidor usa `java.net.ServerSocket` (un hilo por conexión),
+sin `com.sun.net.httpserver` ni frameworks.
+
+```sh
+make build
+make generate   # si aún no existe el dataset en data/
+java -cp build/classes com.hpc.lsdfms.Main serve data --port 8080
+# o simplemente: make serve
+```
+
+Abra <http://127.0.0.1:8080>. Opciones: `--port N` (0 elige un puerto libre; la línea inicial
+`SERVIDOR<TAB>host:puerto` indica el real), `--host H` (por defecto `127.0.0.1`), `--web DIR`
+(por defecto `web`, relativo al directorio de trabajo) y `--debounce-ms N` (espera antes del
+mantenimiento automático; por defecto 5000). `Ctrl+C` cierra el servidor y el servicio con orden.
+
+API JSON: `GET /api/status`, `GET /api/search?col=phone|timestamp|size&lo=&hi=&limit=`,
+`POST|PUT|DELETE /api/records`, `POST /api/maintenance`. Los errores se devuelven como
+`{"error": "..."}` con 400 (entrada inválida), 404, 405, 409 (registro ya borrado o referencia
+obsoleta), 413 (cuerpo mayor de 1 MiB), 431 (cabeceras mayores de 16 KiB), 500 o 503 (cola
+saturada). Tras un mantenimiento los offsets cambian: el cliente debe repetir la búsqueda
+cuando `indexVersion` cambie.
+
 ## Generación de datos
 
 ### Ordenación externa (sprint 5, en curso)
@@ -257,11 +283,13 @@ scripts/generate_cdr.py          Generador streaming reproducible
 scripts/benchmark_index.py       Comparativa y verificación del hito del 50%
 scripts/benchmark_pack.py        Comparativa PACK → INDEX sin modificar la fuente
 src/com/hpc/lsdfms/
-  Main.java                     CLI: inspect, search, search-range, index/index-columns/pack/recover y variantes -parallel
+  Main.java                     CLI: inspect, search, search-range, serve, index/index-columns/pack/recover y variantes -parallel
   model/                        Contrato CDR y serialización del índice
   io/                           Escaneo, copia acotada, compactación y bloqueo de dataset
   core/                         INDEX/PACK secuenciales/paralelos, índices por columna (un hilo cada uno) y recuperación
   search/                       Búsqueda binaria de rangos con verificación
+  server/                       Servidor HTTP sobre ServerSocket, JSON manual, enrutador y API
+web/                            Interfaz web (HTML, CSS, JS) servida por el servidor
 tests/                          Pruebas sin frameworks externos
 data/                           Datasets locales ignorados por Git
 build/                          Clases compiladas ignoradas por Git

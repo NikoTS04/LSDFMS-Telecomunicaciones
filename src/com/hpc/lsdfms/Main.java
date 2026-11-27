@@ -18,6 +18,13 @@ public final class Main {
     private Main() { }
 
     public static void main(String[] args) {
+        if (args.length > 0 && "serve".equals(args[0])) {
+            int code = com.hpc.lsdfms.server.ServeCommand.run(args);
+            if (code != 0) {
+                System.exit(code);
+            }
+            return;
+        }
         if (args.length == 0 || (args.length == 1 && "--help".equals(args[0]))) {
             System.out.println("Uso: java -cp build/classes com.hpc.lsdfms.Main "
                     + "inspect|index|pack|recover <directorio>\n"
@@ -27,6 +34,8 @@ public final class Main {
                     + "index-columns <directorio>   (phone, timestamp y size, un hilo por índice)\n"
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "search-range <directorio> <phone|timestamp|size> <lo> <hi> [límite]\n"
+                    + "     java -cp build/classes com.hpc.lsdfms.Main "
+                    + "serve <directorio> [--port N] [--host H] [--web DIR] [--debounce-ms N]\n"
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "index-parallel|pack-parallel|recover-parallel <directorio> <trabajadores:1-256>\n"
                     + "Salidas: 0 éxito, 1 error de datos/I/O, 2 argumentos inválidos.\n"

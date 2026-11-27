@@ -4,7 +4,7 @@ JAVA ?= java
 CLASSES := build/classes
 SOURCES := $(shell find src -name '*.java')
 
-.PHONY: build generate inspect test
+.PHONY: build generate inspect serve test
 
 build:
 	mkdir -p $(CLASSES)
@@ -15,6 +15,9 @@ generate:
 
 inspect: build
 	$(JAVA) -cp $(CLASSES) com.hpc.lsdfms.Main inspect data
+
+serve: build
+	$(JAVA) -cp $(CLASSES) com.hpc.lsdfms.Main serve data --port 8080
 
 test: build
 	$(PYTHON) -m unittest discover -s tests -v
