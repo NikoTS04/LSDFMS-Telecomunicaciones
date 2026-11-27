@@ -58,7 +58,9 @@ public final class SequentialEngine {
     private PackStats maintain(Path directory, boolean recovery) throws IOException {
         try (DatasetAccess access = DatasetAccess.acquire(directory)) {
             return PackMaintenance.execute(access, recovery, DatasetFiles.list(access.directory()),
-                    operations, PackMaintenance::sequential, (root, sources) -> indexLocked(root));
+                    operations, PackMaintenance::sequential, (root, sources) ->
+                            new ColumnIndexBuilder(new ParallelEngine.Scanner() { }, operations)
+                                    .buildLocked(root, sources));
         }
     }
 

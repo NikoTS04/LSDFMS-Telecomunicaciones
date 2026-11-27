@@ -5,7 +5,10 @@ import com.hpc.lsdfms.io.DatasetFiles;
 import com.hpc.lsdfms.io.DatasetAccess;
 import com.hpc.lsdfms.core.SequentialEngine;
 import com.hpc.lsdfms.core.ParallelEngine;
+import com.hpc.lsdfms.core.ColumnIndexBuilder;
+import com.hpc.lsdfms.model.ColumnIndex;
 import com.hpc.lsdfms.search.BinaryIndexSearch;
+import com.hpc.lsdfms.search.ColumnSearch;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -21,6 +24,10 @@ public final class Main {
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "search <directorio> <phoneNumber>\n"
                     + "     java -cp build/classes com.hpc.lsdfms.Main "
+                    + "index-columns <directorio>   (phone, timestamp y size, un hilo por índice)\n"
+                    + "     java -cp build/classes com.hpc.lsdfms.Main "
+                    + "search-range <directorio> <phone|timestamp|size> <lo> <hi> [límite]\n"
+                    + "     java -cp build/classes com.hpc.lsdfms.Main "
                     + "index-parallel|pack-parallel|recover-parallel <directorio> <trabajadores:1-256>\n"
                     + "Salidas: 0 éxito, 1 error de datos/I/O, 2 argumentos inválidos.\n"
                     + "Propiedades JVM: -Dlsdfms.index.mode=auto|memory|external\n"
@@ -30,11 +37,13 @@ public final class Main {
         }
         boolean valid = (args.length == 2
                 && ("inspect".equals(args[0]) || "index".equals(args[0])
-                        || "pack".equals(args[0]) || "recover".equals(args[0])))
+                        || "pack".equals(args[0]) || "recover".equals(args[0])
+                        || "index-columns".equals(args[0])))
                 || (args.length == 3
                         && ("search".equals(args[0]) || "index-parallel".equals(args[0])
                                 || "pack-parallel".equals(args[0])
-                                || "recover-parallel".equals(args[0])));
+                                || "recover-parallel".equals(args[0])))
+                || ((args.length == 5 || args.length == 6) && "search-range".equals(args[0]));
         if (!valid) {
             System.err.println("Comando inválido. Usa --help.");
             System.exit(2);
@@ -63,6 +72,11 @@ public final class Main {
                             stats.bytesBefore(), stats.bytesAfter(), stats.reclaimedBytes(),
                             stats.activeRecords());
                 }
+                case "index-columns" -> System.out.println("INDEX_COLUMNS\t"
+                        + new ColumnIndexBuilder().build(directory));
+                case "search-range" -> searchRange(directory, ColumnIndex.parse(args[2]),
+                        Long.parseLong(args[3]), Long.parseLong(args[4]),
+                        args.length == 6 ? Long.parseLong(args[5]) : ColumnSearch.NO_LIMIT);
                 case "search" -> search(directory, Long.parseLong(args[2]));
                 default -> throw new IllegalArgumentException("Comando inválido");
             }
@@ -85,6 +99,15 @@ public final class Main {
                     record.phoneNumber(), fileId, offset, record.timestamp(), payload);
         });
         System.out.println("TOTAL\t" + matches);
+    }
+
+    private static void searchRange(Path directory, ColumnIndex column, long lo, long hi,
+            long limit) throws IOException {
+        System.out.println("Telefono\tFileId\tOffset\tTimestamp\tTamano");
+        var result = new ColumnSearch().search(directory, column, lo, hi, limit, hit ->
+                System.out.printf("%d\t%d\t%d\t%d\t%d%n", hit.phone(), hit.fileId(), hit.offset(),
+                        hit.timestamp(), hit.payloadLen()));
+        System.out.println("TOTAL\t" + result.matches() + (result.truncated() ? "\tTRUNCADO" : ""));
     }
 
     private static void inspect(Path directory) throws IOException {

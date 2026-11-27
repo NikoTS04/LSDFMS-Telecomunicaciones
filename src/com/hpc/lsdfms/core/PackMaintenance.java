@@ -3,6 +3,7 @@ package com.hpc.lsdfms.core;
 import com.hpc.lsdfms.io.BinaryFileHandler;
 import com.hpc.lsdfms.io.DatasetAccess;
 import com.hpc.lsdfms.io.DatasetFiles;
+import com.hpc.lsdfms.model.ColumnIndex;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -54,12 +55,15 @@ final class PackMaintenance {
         if (!recovery) {
             access.beginMaintenance();
         }
-        Path index = directory.resolve(SequentialEngine.INDEX_NAME);
-        if (Files.exists(index, LinkOption.NOFOLLOW_LINKS)
-                && !Files.isRegularFile(index, LinkOption.NOFOLLOW_LINKS)) {
-            throw new IOException("Destino de índice no regular: " + index);
+        // Los offsets cambian: se invalidan los índices de todas las columnas, no solo el de teléfono.
+        for (ColumnIndex column : ColumnIndex.values()) {
+            Path index = directory.resolve(column.fileName());
+            if (Files.exists(index, LinkOption.NOFOLLOW_LINKS)
+                    && !Files.isRegularFile(index, LinkOption.NOFOLLOW_LINKS)) {
+                throw new IOException("Destino de índice no regular: " + index);
+            }
+            Files.deleteIfExists(index);
         }
-        Files.deleteIfExists(index);
         long[] sizes = new long[sources.size()];
         tasks.clear();
         for (int i = 0; i < sources.size(); i++) {

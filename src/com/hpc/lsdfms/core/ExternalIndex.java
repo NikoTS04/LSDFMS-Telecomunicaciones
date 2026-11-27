@@ -54,7 +54,17 @@ final class ExternalIndex {
     static long build(Path directory, List<DatasetFiles.Source> sources, long count,
             int workers, ParallelEngine.Scanner scanner, PackMaintenance.Runner runner,
             IndexWriter.Replacement replacement) throws IOException {
-        long bytes = budget();
+        return build(directory, sources, count, workers, scanner, runner, replacement, 1);
+    }
+
+    /**
+     * {@code shares} reparte el presupuesto entre construcciones simultáneas (un índice por
+     * columna), de modo que la suma de todas respete el límite global de memoria.
+     */
+    static long build(Path directory, List<DatasetFiles.Source> sources, long count,
+            int workers, ParallelEngine.Scanner scanner, PackMaintenance.Runner runner,
+            IndexWriter.Replacement replacement, int shares) throws IOException {
+        long bytes = budget() / shares;
         if (bytes < 1024 * 1024) {
             throw new IOException("Heap insuficiente para ordenación externa");
         }

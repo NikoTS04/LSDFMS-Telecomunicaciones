@@ -55,6 +55,23 @@ atómico. `search` devuelve todas las coincidencias verificadas en TSV, seguidas
 `TOTAL`; cero coincidencias es éxito. El payload se muestra como UTF-8 con escapes
 para barra inversa, tabulaciones y saltos de línea.
 
+### Índices por columna y búsqueda por rango
+
+```sh
+java -cp build/classes com.hpc.lsdfms.Main index-columns data
+java -cp build/classes com.hpc.lsdfms.Main search-range data timestamp 1700000000 1700003600 100
+```
+
+`index-columns` construye `index_phone.idx`, `index_timestamp.idx` e `index_size.idx`
+(tamaño del payload) con un hilo explícito por columna (`lsdfms-index-<columna>`), usando
+la misma ordenación externa acotada y el mismo formato de 20 bytes. Si un hilo falla se
+cancelan los demás y se conserva el conjunto anterior; los archivos finales se reemplazan
+solo cuando los tres están completos. `search-range <dir> <phone|timestamp|size> <lo> <hi> [límite]`
+consulta el rango cerrado [lo, hi] (búsqueda exacta con `lo = hi`) y omite los registros
+borrados después de indexar; con límite, `TOTAL` indica `TRUNCADO` si había más. `pack` y
+`pack-parallel` reconstruyen ahora los tres índices; `index` e `index-parallel` siguen
+actualizando solo el de teléfono.
+
 Salidas: `0` éxito, `1` error de datos/I/O o presupuesto de memoria, `2` argumentos
 inválidos. Las operaciones se excluyen mediante un bloqueo cooperativo por dataset.
 No modificar los `.dat` externamente entre indexación y consulta; reconstruir el
@@ -240,10 +257,10 @@ scripts/generate_cdr.py          Generador streaming reproducible
 scripts/benchmark_index.py       Comparativa y verificación del hito del 50%
 scripts/benchmark_pack.py        Comparativa PACK → INDEX sin modificar la fuente
 src/com/hpc/lsdfms/
-  Main.java                     CLI: inspect, search, index/pack/recover y variantes -parallel
+  Main.java                     CLI: inspect, search, search-range, index/index-columns/pack/recover y variantes -parallel
   model/                        Contrato CDR y serialización del índice
   io/                           Escaneo, copia acotada, compactación y bloqueo de dataset
-  core/                         INDEX/PACK secuenciales/paralelos y protocolo de recuperación
+  core/                         INDEX/PACK secuenciales/paralelos, índices por columna (un hilo cada uno) y recuperación
   search/                       Búsqueda binaria de rangos con verificación
 tests/                          Pruebas sin frameworks externos
 data/                           Datasets locales ignorados por Git
