@@ -4,7 +4,7 @@ JAVA ?= java
 CLASSES := build/classes
 SOURCES := $(shell find src -name '*.java')
 
-.PHONY: build generate inspect test
+.PHONY: build generate inspect test demo demo-auto presentation
 
 build:
 	mkdir -p $(CLASSES)
@@ -18,3 +18,12 @@ inspect: build
 
 test: build
 	$(PYTHON) -m unittest discover -s tests -v
+
+demo:
+	$(PYTHON) scripts/demo.py
+
+demo-auto:
+	$(PYTHON) scripts/demo.py --auto --recovery
+
+presentation:
+	$(PYTHON) scripts/presentation_charts.py

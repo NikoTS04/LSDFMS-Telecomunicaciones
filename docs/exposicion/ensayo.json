@@ -1,0 +1,21 @@
+{
+  "description": "Resultados reales de un ensayo automático con recuperación; no son un benchmark",
+  "command": "make demo-auto",
+  "seed": 42,
+  "records": 1000,
+  "active": 783,
+  "deleted_before": 217,
+  "bytes_before": 337689,
+  "bytes_after": 263110,
+  "reclaimed": 74579,
+  "phone": 51971971316,
+  "matches": 3,
+  "same_cdr_file": "F_1.dat",
+  "offset_before": 476,
+  "offset_after": 0,
+  "index_before_sha256": "ae77dd5c2b4e9875f8a061763a15f88abe80704840f35b40df109553014c3e12",
+  "index_modes_equivalent": true,
+  "active_bytes_preserved": true,
+  "second_pack_reclaimed": 0,
+  "recovery_verified": true
+}

@@ -15,7 +15,14 @@ el sprint 4 completa INDEX/PACK paralelos, búsqueda y recuperación de mantenim
 - [Skills recomendadas y criterios de selección](docs/skills-recomendadas.md).
 - [Dónde se utilizaría el motor, con un ejemplo de telecomunicaciones](docs/aplicaciones-del-motor.md).
 
-## Requisitos
+## Demostración para exposición
+
+`make demo` ejecuta el recorrido guiado; `make demo-auto` incluye recuperación sin
+pausas. Ambos usan datasets pequeños y nuevos, sin tocar los de evaluación.
+`make presentation` regenera dos gráficos desde benchmarks reales.
+Ver [guion, checklist y respaldo](docs/exposicion/README.md).
+
+## Requisitos de ejecución
 
 - JDK 17 o superior (`java` y `javac`).
 - Python 3.10 o superior, únicamente biblioteca estándar.
